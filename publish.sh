@@ -36,25 +36,48 @@ gh api --silent -X POST "repos/$OWNER/$REPO_NAME/pages" \
 
 BASE="https://$OWNER.github.io/$REPO_NAME"
 
+# Point both apps at the site that was just published. The consent screen links these pages,
+# so a stale placeholder here means shipping an app whose policy links 404 — which is an App
+# Review rejection and, worse, asks people to agree to documents they cannot read.
+IOS_LEGAL="$HOME/Desktop/CODING/PayWise/TrackWise/UI/Common/LegalConsent.swift"
+ANDROID_LEGAL="$HOME/Desktop/CODING/E_track/app/src/main/java/com/etrack/budget/ui/legal/LegalConsent.kt"
+
+patch_url() {
+  local file="$1" pattern="$2"
+  if [ -f "$file" ]; then
+    # Only the URL inside the quotes changes; the surrounding declaration is left alone.
+    /usr/bin/sed -i '' -E "s#(${pattern}\")[^\"]*(\")#\1${BASE}\2#" "$file"
+    echo "  updated $(basename "$file")"
+  else
+    echo "  SKIPPED (not found): $file"
+  fi
+}
+
+echo
+echo "Pointing the apps at $BASE"
+patch_url "$IOS_LEGAL" "static let baseURL = "
+patch_url "$ANDROID_LEGAL" "private const val BASE = "
+
+echo
+echo "Verifying the pages are reachable (Pages can take a minute on a first publish)…"
+for attempt in $(seq 1 10); do
+  code=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/trackwise-privacy.html" || echo 000)
+  if [ "$code" = "200" ]; then
+    echo "  live: $BASE/trackwise-privacy.html"
+    break
+  fi
+  [ "$attempt" = "10" ] && echo "  still $code — check Settings → Pages, then re-run this script"
+  sleep 15
+done
+
 cat <<EOF
 
-Done. The first build takes a minute or two, then these are live:
+Done.
 
   Privacy policy : $BASE/trackwise-privacy.html
   Terms of use   : $BASE/trackwise-terms.html
 
-Two things to do with them:
-
-1. Paste the privacy URL into Play Console (App content → Privacy policy) and
-   App Store Connect (App Information → Privacy Policy URL).
-
-2. Point the apps at the same base URL, replacing the placeholder in both:
-
-   iOS      PayWise/TrackWise/UI/Common/LegalConsent.swift      -> Legal.baseURL
-   Android  E_track/.../ui/legal/LegalConsent.kt                -> Legal.BASE
-
-   Set both to: $BASE
-
-   Then rebuild. The first-run consent screen links to these pages, so they must
-   resolve before you ship a build.
+Both apps now point at these. Rebuild so the shipped binaries carry the real URLs, then
+paste the privacy URL into Play Console (App content -> Privacy policy) and App Store
+Connect (App Information -> Privacy Policy URL).
 EOF
