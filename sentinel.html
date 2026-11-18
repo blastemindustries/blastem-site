@@ -103,7 +103,7 @@
   .hot::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(0, 120, 255, .6); animation: ping 2.2s var(--ease) infinite; }
   .hot:hover, .hot.on { transform: scale(1.25); background: #031018; }
   .hot.on::after { border-color: var(--cyan); }
-  .hot-card { position: absolute; left: 18px; right: 18px; bottom: 18px; padding: 16px 18px; border-radius: 18px; background: rgba(3,8,18,.88); color: var(--text); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.1); transform: translateY(0); transition: opacity .3s; }
+  .hot-card { margin-top: 14px; padding: 16px 18px; border-radius: 18px; background: #0B1626; color: var(--text); border: 1px solid var(--edge); min-height: 86px; }
   .hot-card h4 { margin: 0 0 4px; font-family: var(--display); font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--cyan); }
   .hot-card p { margin: 0; font-size: 14px; color: var(--muted); }
   .connects { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 30px; }
@@ -529,7 +529,8 @@
         <h2 class="sec-title"><span class="split-line reveal-split"><span>The in-vehicle</span></span><span class="split-line reveal-split"><span class="glow">module.</span></span></h2>
       </div>
       <div class="device-grid">
-        <div class="studio reveal" id="studio">
+        <div class="reveal">
+        <div class="studio" id="studio">
           <div class="studio-inner" id="studioInner">
             <img src="./assets/sentinel/device.webp" alt="Render of the Sentinel FO in-vehicle module: a black OBD-connected unit with a speaker grille, 4G badge, status light and side button">
             <button class="hot" style="left:58.6%;top:21.8%" data-i="0" aria-label="Motion sensing">1</button>
@@ -540,7 +541,8 @@
             <button class="hot" style="left:42.2%;top:61%" data-i="5" aria-label="Status light">6</button>
             <button class="hot" style="left:27.2%;top:88%" data-i="6" aria-label="Vehicle connector">7</button>
           </div>
-          <div class="hot-card" id="hotCard" aria-live="polite"><h4 id="hotT">Tap a point</h4><p id="hotP">Explore what is inside the module.</p></div>
+        </div>
+        <div class="hot-card" id="hotCard" aria-live="polite"><h4 id="hotT">Tap a point</h4><p id="hotP">Explore what is inside the module.</p></div>
         </div>
         <div>
           <p class="lead reveal">One compact edge unit can act as the vehicle&rsquo;s safety gateway.</p>
@@ -1298,8 +1300,8 @@
       });
       if (phase === "warn") {
         ctx.textAlign = "center"; ctx.fillStyle = "#FFAE4F"; ctx.font = "600 12px IBM Plex Mono, monospace";
-        for (var v = 0; v < 3; v++) { var vx = cx - R * 0.42 + v * 26, vy = cy + R * 0.38; ctx.fillRect(vx - 7, vy - 4, 14, 8); }
-        ctx.fillText("⚠ alert sent to vehicles on route", cx - R * 0.42 + 26, cy + R * 0.38 + 24);
+        for (var v = 0; v < 3; v++) { var vx = cx - 26 + v * 26, vy = CH - 58; ctx.fillRect(vx - 7, vy - 4, 14, 8); }
+        ctx.fillText("⚠ alert sent to vehicles on route", cx, CH - 30);
       }
     })(performance.now());
   })();
