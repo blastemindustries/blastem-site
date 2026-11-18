@@ -1,0 +1,1402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentinel FO · Blastem Industries</title>
+<meta name="description" content="Sentinel FO is the intelligent road-safety co-pilot: it connects the vehicle, the road, the environment, the driver and the emergency network into one safety loop.">
+<meta name="theme-color" content="#000208">
+<link rel="icon" href="./blastem-mark.png">
+<link rel="stylesheet" href="./assets/fonts/fonts.css">
+<link rel="stylesheet" href="./assets/site.css">
+<style>
+  :root { --c1: #2BD9E8; --c2: #FFAE4F; --c3: #5FE3A1; --c4: #FF6B6B; --yellow: #FFE14D; }
+  .section { padding: clamp(80px, 12vw, 150px) 0; }
+  .sec-title.sm { font-size: clamp(32px, 4.2vw, 58px); }
+  .lead { font-size: clamp(18px, 1.8vw, 22px); color: var(--text); font-weight: 300; max-width: 52ch; margin: 0; }
+  .muted { color: var(--muted); }
+  .kicker-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .aar { display: flex; flex-wrap: wrap; gap: 10px; }
+  .aar span { font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .16em; padding: 10px 16px; border-radius: 10px; color: #04131C; }
+  .aar span:nth-child(1) { background: var(--c1); } .aar span:nth-child(2) { background: var(--c2); } .aar span:nth-child(3) { background: var(--c3); }
+  .panel { border-radius: 28px; border: 1px solid var(--edge); background: linear-gradient(160deg, rgba(255,255,255,.05), rgba(255,255,255,.012)); }
+  .mono-label { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+
+  /* ---------- hero ---------- */
+  .s-hero { position: relative; min-height: 100svh; overflow: hidden; display: grid; align-items: center; padding: 120px 0 70px; }
+  #road { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .s-hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 80% 70% at 30% 50%, transparent 20%, var(--void) 92%), linear-gradient(180deg, transparent 75%, var(--void)); }
+  .s-hero-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.1fr .9fr; gap: 50px; align-items: center; }
+  .s-hero h1 { font-family: var(--display); font-weight: 700; text-transform: uppercase; line-height: .9; letter-spacing: -.02em; margin: 24px 0 12px; font-size: clamp(56px, 9.5vw, 140px); }
+  .s-hero h1 .line { display: block; overflow: hidden; padding: .06em .5em .12em; margin: -.06em -.5em -.12em; }
+  .s-hero h1 .line > span { display: inline-block; transform: translateY(110%); transition: transform 1.2s var(--ease); }
+  .ready .s-hero h1 .line > span { transform: none; }
+  .s-hero h1 .line:nth-child(2) > span { transition-delay: .1s; }
+  .s-hero .sub { font-family: var(--display); font-size: clamp(18px, 2.2vw, 28px); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 28px; }
+  .s-hero .lead { margin-bottom: 30px; }
+  .s-hero .aar { margin-bottom: 34px; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 1s var(--ease), transform 1s var(--ease); }
+  .ready .fade-up { opacity: 1; transform: none; }
+  .ready .fade-up.d1 { transition-delay: .35s; } .ready .fade-up.d2 { transition-delay: .5s; } .ready .fade-up.d3 { transition-delay: .65s; } .ready .fade-up.d4 { transition-delay: .8s; }
+  .cockpit { position: relative; perspective: 1000px; justify-self: center; width: min(100%, 460px); }
+  .cockpit-frame { position: relative; border-radius: 30px; overflow: hidden; aspect-ratio: 2 / 3; border: 1px solid var(--edge); box-shadow: 0 40px 100px rgba(0,0,0,.7), 0 0 0 1px rgba(0,245,255,.08); transform-style: preserve-3d; transition: transform .25s ease-out; }
+  .cockpit-frame img { width: 100%; height: 100%; object-fit: cover; }
+  .cockpit-frame::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,2,8,.1), transparent 30%, transparent 60%, rgba(0,2,8,.6)); }
+  .scan { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow: 0 0 16px var(--cyan); top: 0; animation: scan 4s var(--ease) infinite; z-index: 2; }
+  @keyframes scan { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+  .chip-hud { position: absolute; z-index: 3; border-radius: 14px; padding: 10px 12px; background: rgba(3, 8, 18, .78); border: 1px solid var(--edge); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .06em; animation: floaty 6s ease-in-out infinite; }
+  .chip-hud b { display: block; font-family: var(--display); font-size: 20px; color: var(--text); letter-spacing: 0; font-variant-numeric: tabular-nums; }
+  .chip-hud.a { top: 9%; right: -10%; } .chip-hud.b { top: 50%; right: -12%; animation-delay: -2s; } .chip-hud.c { bottom: 9%; left: -8%; animation-delay: -4s; }
+  .chip-hud.b b { color: var(--c3); } .chip-hud.c b { color: var(--c2); }
+  @keyframes floaty { 50% { transform: translateY(-10px); } }
+
+  /* ---------- problem ---------- */
+  .problem { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(30px, 6vw, 80px); align-items: start; }
+  .know { font-family: var(--display); font-size: clamp(26px, 3.4vw, 44px); line-height: 1.15; font-weight: 600; margin: 0; }
+  .know span { display: block; color: rgba(234,246,255,.18); transition: color .6s var(--ease); }
+  .know span.on { color: var(--text); }
+  .know span.last.on { color: var(--yellow); }
+  .figures { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 46px; }
+  .figure { padding: 24px; border-radius: 22px; border: 1px solid var(--edge); background: var(--panel); }
+  .figure b { display: block; font-family: var(--display); font-size: clamp(44px, 5.5vw, 72px); line-height: 1; font-variant-numeric: tabular-nums; }
+  .figure b small { font-size: .42em; color: var(--muted); margin-left: 6px; }
+  .figure > span { display: block; margin-top: 10px; color: var(--muted); font-size: 14.5px; }
+  .figure.red b { color: #FF8A8A; }
+  .signals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; position: relative; }
+  .signal { position: relative; border-radius: 20px; padding: 20px 18px 22px; background: #0B1626; border: 1px solid var(--edge); overflow: hidden; transition: transform .6s var(--ease), border-color .5s; }
+  .signal::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 3px; background: var(--sc); box-shadow: 0 0 12px var(--sc); }
+  .signal h4 { font-family: var(--display); font-size: 16px; letter-spacing: .1em; margin: 0 0 8px; }
+  .signal p { margin: 0; color: var(--muted); font-size: 13.5px; }
+  .signals.joined .signal { border-color: color-mix(in srgb, var(--sc) 55%, transparent); }
+  .opp { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; }
+  .opp b { font-family: var(--display); color: var(--cyan); font-size: 18px; }
+  .opp span { font-family: var(--display); font-size: clamp(20px, 2.4vw, 28px); font-weight: 700; text-transform: uppercase; }
+  .opp em { font-style: normal; color: var(--c3); font-family: var(--display); font-size: clamp(16px, 1.8vw, 20px); text-transform: uppercase; letter-spacing: .04em; display: block; width: 100%; }
+
+  /* ---------- concept network ---------- */
+  .net-wrap { position: relative; border-radius: 32px; border: 1px solid var(--edge); background: radial-gradient(ellipse at 65% 50%, rgba(0,245,255,.07), transparent 60%), var(--ink); overflow: hidden; }
+  .net-wrap svg { display: block; width: 100%; height: auto; }
+  .net-node { cursor: pointer; }
+  .net-node rect { fill: #0E1A2C; stroke-width: 1.6; transition: fill .3s, filter .3s; }
+  .net-node text { fill: #EAF6FF; font-family: "Chakra Petch", sans-serif; font-weight: 600; font-size: 13px; letter-spacing: .08em; text-anchor: middle; pointer-events: none; }
+  .net-node text.small { font-size: 11px; font-weight: 500; fill: #9AB0C4; }
+  .net-node:hover rect, .net-node.on rect { fill: #13263D; filter: drop-shadow(0 0 12px currentColor); }
+  .net-link { fill: none; stroke: rgba(154,176,196,.22); stroke-width: 1.2; transition: stroke .3s, stroke-width .3s; }
+  .net-link.on { stroke: var(--cyan); stroke-width: 2; }
+  .net-info { position: relative; margin: 0 24px 24px; padding: 18px 20px; min-height: 88px; border-radius: 18px; background: rgba(3,8,18,.82); border: 1px solid var(--edge); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .net-info h4 { margin: 0 0 6px; font-family: var(--display); letter-spacing: .1em; font-size: 15px; text-transform: uppercase; }
+  .net-info p { margin: 0; color: var(--muted); font-size: 14px; }
+  .loop-ring { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 30px; }
+  .loop-ring span { font-family: var(--display); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; font-size: 13px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--edge); color: var(--muted); transition: all .4s var(--ease); }
+  .loop-ring span.on { color: #04131C; background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 26px rgba(0,245,255,.5); transform: translateY(-3px); }
+  .loop-ring i { align-self: center; color: var(--dim); font-style: normal; }
+
+  /* ---------- device ---------- */
+  .device-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
+  .studio { position: relative; border-radius: 34px; overflow: hidden; background: radial-gradient(circle at 50% 40%, #F2F2F2, #E6E6E6 60%, #D9D9D9); aspect-ratio: 1; perspective: 1200px; box-shadow: 0 40px 90px rgba(0,0,0,.6); }
+  .studio-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .3s ease-out; }
+  .studio img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hot { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: rgba(0, 120, 255, .9); box-shadow: 0 0 0 6px rgba(0, 120, 255, .22), 0 6px 16px rgba(0,0,0,.35); color: #fff; font-family: var(--mono); font-size: 11px; display: grid; place-items: center; transition: transform .3s var(--ease), background .3s; }
+  .hot::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(0, 120, 255, .6); animation: ping 2.2s var(--ease) infinite; }
+  .hot:hover, .hot.on { transform: scale(1.25); background: #031018; }
+  .hot.on::after { border-color: var(--cyan); }
+  .hot-card { margin-top: 14px; padding: 16px 18px; border-radius: 18px; background: #0B1626; color: var(--text); border: 1px solid var(--edge); min-height: 86px; }
+  .hot-card h4 { margin: 0 0 4px; font-family: var(--display); font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--cyan); }
+  .hot-card p { margin: 0; font-size: 14px; color: var(--muted); }
+  .connects { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 30px; }
+  .conn { padding: 16px 16px 16px 18px; border-radius: 16px; background: #0B1626; border: 1px solid var(--edge); position: relative; transition: border-color .3s, background .3s; cursor: default; }
+  .conn::before { content: ""; position: absolute; left: 0; top: 12px; bottom: 12px; width: 3px; border-radius: 3px; background: var(--sc, var(--c1)); }
+  .conn h4 { margin: 0 0 4px; font-family: var(--display); font-size: 13px; letter-spacing: .12em; }
+  .conn p { margin: 0; font-size: 13px; color: var(--muted); }
+  .conn.hl { border-color: var(--cyan); background: #0E1E33; }
+  .modes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .modes span { font-family: var(--display); font-weight: 700; font-size: 12px; letter-spacing: .12em; padding: 9px 14px; border-radius: 9px; color: #04131C; }
+
+  /* ---------- architecture ---------- */
+  .arch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; position: relative; }
+  .layer { position: relative; border-radius: 26px; padding: 26px 24px; background: #0B1626; border: 1px solid var(--edge); transition: transform .5s var(--ease), border-color .4s; }
+  .layer::before { content: ""; position: absolute; left: 0; top: 18px; bottom: 18px; width: 4px; border-radius: 4px; background: var(--sc); box-shadow: 0 0 14px var(--sc); }
+  .layer .n { font-family: var(--display); font-weight: 700; font-size: 56px; line-height: 1; color: transparent; -webkit-text-stroke: 1px var(--sc); }
+  .layer h3 { font-family: var(--display); font-size: 20px; letter-spacing: .06em; text-transform: uppercase; margin: 10px 0 6px; }
+  .layer > p { margin: 0 0 18px; color: var(--muted); font-size: 14.5px; }
+  .layer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .layer li { font-size: 14px; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.05); color: var(--text); transition: background .3s, border-color .3s, transform .3s var(--ease); }
+  .layer li:hover { border-color: var(--sc); transform: translateX(4px); background: rgba(255,255,255,.06); }
+  .layer:hover { transform: translateY(-6px); border-color: color-mix(in srgb, var(--sc) 50%, transparent); }
+  .arch-line { text-align: center; margin-top: 40px; font-family: var(--display); font-weight: 700; font-size: clamp(18px, 2.4vw, 30px); text-transform: uppercase; letter-spacing: .02em; }
+  .arch-line span { display: inline-block; }
+  .arch-line span:nth-child(1) { color: var(--c1); } .arch-line span:nth-child(2) { color: var(--c2); } .arch-line span:nth-child(3) { color: var(--c3); }
+  .pipeline { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .pipeline span { padding: 7px 11px; border-radius: 8px; border: 1px solid var(--edge); background: var(--panel); }
+  .pipeline i { font-style: normal; color: var(--c2); }
+
+  /* ---------- simulator ---------- */
+  .q-big { font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(26px, 3.6vw, 50px); line-height: 1.05; margin: 0; }
+  .q-big s { text-decoration-thickness: 3px; text-decoration-color: var(--c4); color: var(--dim); }
+  .q-big em { font-style: normal; color: var(--cyan); display: block; margin-top: 6px; }
+  .sim { display: grid; grid-template-columns: 360px 1fr; gap: 18px; margin-top: 50px; }
+  .sim-controls { padding: 24px; display: grid; gap: 20px; align-content: start; }
+  .ctl label, .ctl .lbl { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11.5px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; }
+  .ctl label b { color: var(--text); font-weight: 500; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg button { flex: 1 1 auto; font-family: var(--display); font-weight: 600; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; padding: 9px 10px; border-radius: 10px; border: 1px solid var(--edge); background: var(--panel); color: var(--muted); cursor: pointer; transition: all .25s; }
+  .seg button[aria-pressed="true"] { background: var(--cyan); color: #031018; border-color: var(--cyan); }
+  input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; background: transparent; height: 26px; cursor: pointer; }
+  input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 6px; background: linear-gradient(90deg, var(--cyan) var(--p, 50%), rgba(255,255,255,.1) var(--p, 50%)); }
+  input[type=range]::-moz-range-track { height: 6px; border-radius: 6px; background: linear-gradient(90deg, var(--cyan) var(--p, 50%), rgba(255,255,255,.1) var(--p, 50%)); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #fff; margin-top: -8px; box-shadow: 0 0 0 5px rgba(0,245,255,.25), 0 0 16px var(--cyan); }
+  input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 5px rgba(0,245,255,.25), 0 0 16px var(--cyan); }
+  .sim-stage { display: grid; grid-template-rows: auto auto auto; gap: 18px; min-width: 0; }
+  .scene { position: relative; border-radius: 26px; overflow: hidden; border: 1px solid var(--edge); background: #050B16; aspect-ratio: 16 / 7; }
+  #scene { width: 100%; height: 100%; display: block; }
+  .scene-hud { position: absolute; top: 14px; left: 14px; right: 14px; display: flex; justify-content: space-between; gap: 10px; pointer-events: none; }
+  .scene-hud .pill { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 7px 11px; border-radius: 999px; background: rgba(3,8,18,.7); border: 1px solid var(--edge); color: var(--muted); }
+  .scene-hud .pill b { color: var(--text); font-weight: 500; }
+  .decision-banner { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); padding: 10px 18px; border-radius: 14px; font-family: var(--display); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 14px; background: rgba(3,8,18,.82); border: 1px solid var(--edge); white-space: nowrap; transition: color .3s, border-color .3s, box-shadow .3s; }
+  .outputs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .out { padding: 16px 16px 14px; border-radius: 18px; background: #0B1626; border: 1px solid var(--edge); position: relative; overflow: hidden; }
+  .out::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--sc); }
+  .out dt { font-family: var(--display); font-size: 11px; letter-spacing: .16em; color: var(--muted); text-transform: uppercase; }
+  .out dd { margin: 6px 0 0; font-family: var(--display); font-weight: 700; font-size: 36px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .out dd small { font-size: 13px; color: var(--dim); margin-left: 4px; font-weight: 500; }
+  .out p { margin: 6px 0 0; font-size: 12px; color: var(--dim); }
+  .ladder { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .rung { padding: 12px 14px; border-radius: 14px; border: 1px solid var(--edge); background: var(--panel); opacity: .4; transition: all .4s var(--ease); }
+  .rung b { display: block; font-family: var(--display); font-size: 13px; letter-spacing: .14em; }
+  .rung span { font-size: 12px; color: var(--muted); }
+  .rung.on { opacity: 1; border-color: var(--sc); box-shadow: 0 0 0 1px var(--sc) inset, 0 10px 30px rgba(0,0,0,.4); }
+  .rung.past { opacity: .75; }
+  .sim-note { margin-top: 16px; font-size: 13px; color: var(--dim); }
+
+  /* ---------- horizon ---------- */
+  .horizon { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(30px, 5vw, 70px); align-items: center; }
+  .tall-img { position: relative; border-radius: 30px; overflow: hidden; aspect-ratio: 2 / 3; border: 1px solid var(--edge); }
+  .tall-img img { width: 100%; height: 115%; object-fit: cover; will-change: transform; }
+  .steps4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 36px 0 26px; position: relative; }
+  .steps4::before { content: ""; position: absolute; left: 6%; right: 6%; top: 30px; height: 2px; background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4)); opacity: .5; }
+  .st { position: relative; text-align: center; }
+  .st .box { display: grid; place-items: center; height: 60px; border-radius: 14px; border: 1.6px solid var(--sc); background: #0E1A2C; font-family: var(--display); font-weight: 700; letter-spacing: .14em; font-size: 13px; position: relative; z-index: 1; transition: transform .5s var(--ease), box-shadow .5s; }
+  .st.in .box { box-shadow: 0 0 24px color-mix(in srgb, var(--sc) 45%, transparent); }
+  .st h4 { margin: 14px 0 4px; font-family: var(--display); font-size: 15px; }
+  .st p { margin: 0; font-size: 12.5px; color: var(--muted); }
+  .horizon-bar { margin-top: 10px; padding: 18px 20px; border-radius: 20px; border: 1px solid var(--edge); background: var(--panel); }
+  .hb-track { position: relative; height: 48px; margin-top: 12px; border-radius: 12px; background: linear-gradient(90deg, rgba(0,245,255,.18), rgba(0,245,255,.02)); overflow: hidden; }
+  .hb-track .car { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 30px; height: 16px; border-radius: 5px; background: #fff; box-shadow: 0 0 14px #fff; }
+  .hb-track .hz { position: absolute; top: 50%; transform: translate(-50%, -50%); font-family: var(--mono); font-size: 10px; color: #031018; background: var(--c2); padding: 4px 7px; border-radius: 6px; white-space: nowrap; transition: left .1s linear; }
+  .hb-track .hz.r { background: var(--c4); }
+  .hb-track .hz.g { background: var(--c3); }
+  .hb-ticks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: var(--dim); margin-top: 6px; }
+  .more-time { display: inline-block; margin-top: 22px; font-family: var(--display); font-weight: 700; letter-spacing: .14em; font-size: 13px; padding: 12px 18px; border-radius: 12px; background: var(--c1); color: #031018; }
+
+  /* ---------- escalation ---------- */
+  .esc { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(30px, 5vw, 70px); }
+  .esc-media { position: sticky; top: 110px; align-self: start; }
+  .esc-steps { display: grid; gap: 14px; }
+  .esc-step { display: grid; grid-template-columns: 64px 1fr; gap: 20px; align-items: center; padding: 26px; border-radius: 24px; border: 1px solid var(--edge); background: #0B1626; opacity: .35; transform: translateX(20px); transition: opacity .6s var(--ease), transform .6s var(--ease), border-color .6s; }
+  .esc-step.on { opacity: 1; transform: none; border-color: color-mix(in srgb, var(--sc) 55%, transparent); }
+  .esc-step .num { width: 64px; height: 64px; border-radius: 18px; background: var(--sc); color: #031018; display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 26px; }
+  .esc-step h3 { margin: 0 0 4px; font-family: var(--display); font-size: clamp(24px, 3vw, 34px); text-transform: uppercase; letter-spacing: .02em; }
+  .esc-step p { margin: 0; color: var(--muted); }
+  .principle { margin-top: 22px; padding: 18px 20px; border-radius: 18px; border: 1px dashed rgba(255,225,77,.4); color: var(--yellow); font-size: 15px; }
+
+  /* ---------- emergency ---------- */
+  .emg { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .emg-visual { position: relative; border-radius: 28px; overflow: hidden; border: 1px solid var(--edge); min-height: 520px; background: #050B16; }
+  .emg-visual > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; transition: opacity .6s; }
+  .emg-visual.active > img { opacity: .2; }
+  #emgMap { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .emg-overlay { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; }
+  .countdown { display: none; text-align: center; padding: 26px 28px; border-radius: 26px; background: rgba(40, 6, 6, .88); border: 1px solid rgba(255,107,107,.6); box-shadow: 0 0 60px rgba(255,90,90,.35); width: min(100%, 320px); }
+  .countdown.show { display: block; animation: pop .5s var(--ease); }
+  @keyframes pop { from { transform: scale(.85); opacity: 0; } }
+  .countdown h4 { margin: 0; font-family: var(--display); letter-spacing: .16em; color: #FF8A8A; font-size: 14px; }
+  .cd-ring { position: relative; width: 130px; margin: 14px auto; }
+  .cd-ring svg { transform: rotate(-90deg); width: 100%; }
+  .cd-ring circle { fill: none; stroke-width: 8; }
+  .cd-ring b { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-size: 46px; }
+  .countdown p { margin: 0 0 14px; font-size: 13px; color: #F4CACA; }
+  .countdown button { width: 100%; }
+  .emg-panel { padding: 26px; display: flex; flex-direction: column; }
+  .emg-steps { display: grid; gap: 8px; margin: 18px 0 22px; }
+  .es { display: grid; grid-template-columns: 34px 120px 1fr; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--edge); background: rgba(255,255,255,.02); transition: all .4s var(--ease); }
+  .es i { font-style: normal; font-family: var(--mono); font-size: 12px; color: var(--dim); }
+  .es b { font-family: var(--display); letter-spacing: .12em; font-size: 14px; }
+  .es span { font-size: 13px; color: var(--muted); }
+  .es.on { border-color: var(--c4); background: rgba(255,107,107,.08); }
+  .es.done { border-color: rgba(95,227,161,.5); }
+  .es.done i { color: var(--c3); }
+  .emg-log { flex: 1; min-height: 120px; font-family: var(--mono); font-size: 12px; color: var(--muted); padding: 14px; border-radius: 14px; background: #050B16; border: 1px solid var(--edge); overflow: hidden; line-height: 1.7; }
+  .emg-log div { animation: slideIn .4s var(--ease); }
+  .emg-log .ok { color: var(--c3); } .emg-log .warn { color: #FF8A8A; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } }
+  .emg-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .btn.red { background: linear-gradient(90deg, #FF5A5A, #FF8A6B); color: #210404; border-color: transparent; box-shadow: 0 10px 34px rgba(255,90,90,.3); }
+  .btn.red::before { background: #fff; }
+  .standalone { margin-top: 18px; font-size: 14px; color: var(--yellow); }
+
+  /* ---------- deployment ---------- */
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .tabs button { font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; padding: 14px 20px; border-radius: 14px; border: 1px solid var(--edge); background: var(--panel); color: var(--muted); cursor: pointer; transition: all .3s; position: relative; }
+  .tabs button[aria-selected="true"] { color: #031018; background: var(--sc); border-color: var(--sc); }
+  .deploy { display: grid; grid-template-columns: .9fr 1.1fr; gap: 18px; }
+  .deploy-card { padding: 30px; }
+  .deploy-card h3 { font-family: var(--display); font-size: clamp(30px, 4vw, 48px); margin: 0 0 6px; text-transform: uppercase; }
+  .deploy-card .base { color: var(--muted); margin: 0 0 22px; }
+  .deploy-card ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .deploy-card li { font-size: 17px; color: var(--yellow); display: flex; gap: 12px; align-items: center; animation: slideIn .5s var(--ease) both; }
+  .deploy-card li::before { content: ""; width: 8px; height: 8px; transform: rotate(45deg); background: var(--yellow); box-shadow: 0 0 10px var(--yellow); }
+  .layers8 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; }
+  .l8 { padding: 14px 16px; border-radius: 14px; border: 1px solid var(--edge); background: rgba(255,255,255,.02); opacity: .3; transition: all .5s var(--ease); }
+  .l8 b { display: block; font-family: var(--display); font-size: 14px; }
+  .l8 span { font-size: 12px; color: var(--muted); }
+  .l8.on { opacity: 1; border-color: rgba(0,245,255,.4); background: rgba(0,245,255,.05); }
+  .chain { text-align: center; margin-top: 30px; font-family: var(--display); font-weight: 700; color: var(--cyan); letter-spacing: .06em; font-size: clamp(16px, 2vw, 22px); }
+
+  /* ---------- connected ---------- */
+  .connected { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(30px, 5vw, 60px); align-items: center; }
+  .wide-img { position: relative; border-radius: 28px; overflow: hidden; border: 1px solid var(--edge); aspect-ratio: 16 / 9; }
+  .wide-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+  .wide-img:hover img { transform: scale(1.05); }
+  .abcd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 30px 0; position: relative; }
+  .abcd::before { content: ""; position: absolute; left: 10%; right: 10%; top: 28px; height: 2px; background: var(--cyan); opacity: .4; }
+  .abcd .pkt { position: absolute; top: 24px; left: 10%; width: 10px; height: 10px; border-radius: 50%; background: #fff; box-shadow: 0 0 14px var(--cyan), 0 0 4px #fff; animation: travel 3.2s var(--ease) infinite; z-index: 2; }
+  @keyframes travel { 0% { left: 10%; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { left: 88%; opacity: 0; } }
+  .abcd div { text-align: center; position: relative; z-index: 1; }
+  .abcd b { display: grid; place-items: center; width: 56px; height: 56px; margin: 0 auto 10px; border-radius: 14px; border: 1.6px solid var(--sc); background: #0E1A2C; font-family: var(--display); }
+  .abcd span { font-size: 14px; color: var(--muted); }
+  .coop { display: inline-block; font-family: var(--display); font-weight: 700; letter-spacing: .1em; font-size: 13px; padding: 12px 18px; border-radius: 12px; background: var(--c1); color: #031018; }
+
+  /* ---------- platform consoles ---------- */
+  .console-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .console-tabs button { font-family: var(--display); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: 13px; padding: 13px 18px; border-radius: 14px; border: 1px solid var(--edge); background: var(--panel); color: var(--muted); cursor: pointer; }
+  .console-tabs button[aria-selected="true"] { color: #031018; background: var(--sc); border-color: var(--sc); }
+  .browser { border-radius: 24px; overflow: hidden; border: 1px solid var(--edge); background: #0A0F18; box-shadow: 0 40px 90px rgba(0,0,0,.6); }
+  .browser-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #121A26; border-bottom: 1px solid var(--edge); }
+  .browser-bar i { width: 11px; height: 11px; border-radius: 50%; background: #FF5F57; } .browser-bar i:nth-child(2) { background: #FEBC2E; } .browser-bar i:nth-child(3) { background: #28C840; }
+  .browser-bar span { margin-left: 12px; flex: 1; max-width: 420px; font-family: var(--mono); font-size: 11.5px; color: var(--dim); background: rgba(255,255,255,.05); padding: 6px 12px; border-radius: 8px; }
+  .con { display: none; }
+  .con.on { display: block; animation: fadeIn .5s var(--ease); }
+  @keyframes fadeIn { from { opacity: 0; } }
+  .sen { background: radial-gradient(ellipse at 30% 0%, #17463C, #0B1F1C 60%); padding: 18px; color: #DFF5EE; min-height: 520px; }
+  .sen-head { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 14px; }
+  .sen-title, .sen-user { border-radius: 16px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.05); padding: 14px 18px; }
+  .sen-title b { display: block; font-size: clamp(18px, 2.4vw, 26px); font-family: var(--body); font-weight: 600; }
+  .sen-title span { color: #7FE3C4; font-size: 13px; }
+  .sen-user { text-align: center; font-size: 11px; color: #9CC; } .sen-user b { display: block; color: #fff; font-size: 13px; letter-spacing: .06em; }
+  .sen-body { display: grid; grid-template-columns: 170px 1fr 1.2fr 1fr; gap: 12px; }
+  .sen-side, .sen-card { border-radius: 16px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.045); padding: 12px; }
+  .sen-side small { display: block; color: #7FE3C4; font-size: 10px; letter-spacing: .12em; margin: 8px 4px 6px; text-transform: uppercase; }
+  .sen-side div { font-size: 12px; padding: 8px 10px; border-radius: 9px; margin-bottom: 5px; background: rgba(255,255,255,.04); text-align: center; }
+  .sen-side div.on { background: rgba(255,255,255,.14); }
+  .sen-card h5 { margin: 0 0 4px; font-size: 10px; letter-spacing: .14em; color: #7FE3C4; text-transform: uppercase; font-weight: 500; }
+  .sen-card h6 { margin: 0 0 10px; font-size: 15px; font-weight: 600; }
+  .inc { border-radius: 12px; padding: 10px; background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.08); margin-bottom: 8px; font-size: 11.5px; animation: slideIn .5s var(--ease); }
+  .inc b { display: block; font-size: 12.5px; }
+  .inc .sev { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 6px; font-size: 10px; letter-spacing: .08em; background: #F26B3A; color: #fff; }
+  .inc .sev.med { background: #E0A02C; }
+  .sen-map { position: relative; height: 300px; border-radius: 12px; overflow: hidden; background: #E8EEE4; }
+  .sen-map canvas { width: 100%; height: 100%; display: block; }
+  .stream { display: grid; gap: 8px; max-height: 360px; overflow: hidden; }
+  .stream div { border-radius: 10px; padding: 9px 10px; border: 1px solid rgba(255,255,255,.18); font-size: 11.5px; background: rgba(0,0,0,.2); animation: slideIn .5s var(--ease); }
+  .sams { background: radial-gradient(ellipse at 80% 0%, #4A2412, #1A0F0A 60%); padding: 18px; color: #F5E6DC; min-height: 520px; }
+  .sams-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,.1); background: rgba(0,0,0,.25); margin-bottom: 14px; }
+  .sams-head img { width: 34px; }
+  .sams-head .t { text-align: right; font-size: 12px; letter-spacing: .1em; font-weight: 600; }
+  .sams-head .t b { display: block; color: #FF7A2F; font-size: 13px; }
+  .sams-head .t small { color: #C9A; font-size: 10px; }
+  .sams-body { display: grid; grid-template-columns: 180px 1fr; gap: 14px; }
+  .sams-side { display: grid; gap: 6px; align-content: start; }
+  .sams-side div { font-size: 12px; font-weight: 600; padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07); }
+  .sams-side div.on { border-color: #FF7A2F; color: #FF9A5C; }
+  .sams-main h5 { margin: 0 0 12px; font-size: 18px; letter-spacing: .04em; }
+  .sams-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .sams-tabs span { font-size: 10.5px; font-weight: 600; letter-spacing: .06em; padding: 7px 11px; border-radius: 8px; border: 1px solid rgba(255,255,255,.14); }
+  .sams-tabs span.on { background: #E8541C; border-color: #E8541C; }
+  .seg-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .seg-table th { text-align: left; font-size: 10.5px; letter-spacing: .1em; color: #C9A; padding: 9px 10px; background: rgba(232,84,28,.15); }
+  .seg-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .seg-table tr { animation: slideIn .4s var(--ease) both; }
+  .pillx { font-size: 10px; padding: 3px 8px; border-radius: 6px; background: rgba(95,227,161,.18); color: #8BF0BE; }
+  .pillx.dyn { background: rgba(255,174,79,.2); color: #FFC27A; }
+  .sams-map { margin-top: 12px; height: 150px; border-radius: 12px; overflow: hidden; background: #1E2A33; position: relative; }
+  .sams-map canvas { width: 100%; height: 100%; display: block; }
+  .demo-flag { margin-top: 14px; font-size: 13px; color: var(--dim); }
+
+  /* ---------- feature stack ---------- */
+  .stack { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .fs { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; padding: 22px 24px; border-radius: 20px; background: #0B1626; border: 1px solid var(--edge); position: relative; overflow: hidden; }
+  .fs::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; background: var(--sc); border-radius: 3px; }
+  .fs h4 { margin: 0; font-family: var(--display); font-size: 20px; }
+  .fs .k { grid-row: span 2; align-self: start; font-family: var(--mono); font-size: 11px; padding: 6px 10px; border-radius: 8px; background: var(--sc); color: #031018; font-weight: 500; }
+  .fs p { margin: 0; color: var(--yellow); font-size: 14.5px; }
+
+  /* ---------- comparison ---------- */
+  .cmp { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .cmp th { font-family: var(--display); font-size: 14px; letter-spacing: .12em; text-transform: uppercase; padding: 16px 18px; color: #031018; text-align: left; }
+  .cmp th:nth-child(1) { background: var(--c1); border-radius: 14px 0 0 14px; } .cmp th:nth-child(2) { background: var(--c2); } .cmp th:nth-child(3) { background: var(--c3); border-radius: 0 14px 14px 0; }
+  .cmp td { padding: 18px; border-bottom: 1px solid var(--edge); font-size: 16px; transition: background .3s, color .3s; }
+  .cmp td:nth-child(1) { font-family: var(--display); font-weight: 600; font-size: 17px; }
+  .cmp td:nth-child(2) { color: var(--dim); }
+  .cmp tr:hover td { background: rgba(255,255,255,.03); }
+  .cmp tr:hover td:nth-child(3) { color: var(--c3); }
+  .cmp tr:hover td:nth-child(2) { text-decoration: line-through; text-decoration-color: rgba(255,107,107,.6); }
+  .disclaimer { margin-top: 24px; color: var(--yellow); font-size: 15px; }
+
+  /* ---------- roadmap ---------- */
+  .road { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding-top: 10px; }
+  .road-line { position: absolute; left: 12.5%; right: 12.5%; top: 38px; height: 2px; background: var(--edge); }
+  .road-line i { position: absolute; inset: 0; background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4)); transform-origin: left; transform: scaleX(0); box-shadow: 0 0 14px var(--cyan); }
+  .rm { text-align: center; position: relative; }
+  .rm b { display: grid; place-items: center; width: 58px; height: 58px; margin: 0 auto 18px; border-radius: 16px; border: 1.6px solid var(--sc); background: #0E1A2C; font-family: var(--display); font-size: 15px; transition: box-shadow .5s, transform .5s var(--ease); position: relative; z-index: 1; }
+  .rm.on b { box-shadow: 0 0 26px color-mix(in srgb, var(--sc) 55%, transparent); transform: scale(1.08); }
+  .rm h4 { margin: 0 0 6px; font-family: var(--display); font-size: 17px; letter-spacing: .06em; text-transform: uppercase; }
+  .rm p { margin: 0; color: var(--muted); font-size: 14px; }
+  .network-effect { text-align: center; margin-top: 50px; font-family: var(--display); font-weight: 600; color: var(--cyan); font-size: clamp(18px, 2.2vw, 26px); }
+  .supports { text-align: center; margin-top: 14px; color: var(--yellow); }
+
+  /* ---------- finale ---------- */
+  .finale { text-align: center; padding: clamp(110px, 16vw, 200px) 0; position: relative; overflow: hidden; }
+  .finale::before { content: ""; position: absolute; left: 50%; top: 50%; width: 1000px; height: 1000px; max-width: 170vw; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(0,245,255,.13), transparent 60%); }
+  .finale .eyebrow { position: relative; }
+  .finale h2 { position: relative; font-family: var(--display); font-weight: 700; text-transform: uppercase; font-size: clamp(40px, 8vw, 120px); line-height: .92; margin: 20px 0 10px; letter-spacing: -.02em; }
+  .finale .orange { color: var(--c2); }
+  .finale p { position: relative; max-width: 50ch; margin: 24px auto 30px; color: var(--muted); font-size: 18px; }
+  .finale .aar { justify-content: center; position: relative; margin-bottom: 30px; }
+  .finale .tagline { position: relative; color: var(--yellow); font-weight: 600; font-size: 18px; margin-bottom: 40px; }
+  .finale .hero-actions { justify-content: center; position: relative; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1100px) {
+    .sim { grid-template-columns: 1fr; }
+    .sen-body { grid-template-columns: 1fr 1fr; }
+    .sen-side { display: none; }
+  }
+  @media (max-width: 980px) {
+    .s-hero-grid, .problem, .device-grid, .horizon, .esc, .emg, .deploy, .connected { grid-template-columns: 1fr; }
+    .cockpit { width: min(80vw, 380px); }
+    .chip-hud.a { right: -4%; } .chip-hud.b { right: -4%; } .chip-hud.c { left: -2%; }
+    .arch { grid-template-columns: 1fr; }
+    .esc-media { position: static; }
+    .esc-media .tall-img { aspect-ratio: 16 / 10; }
+    .horizon .tall-img { aspect-ratio: 16 / 10; }
+    .outputs { grid-template-columns: 1fr 1fr; }
+    .road { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+    .road-line { display: none; }
+  }
+  @media (max-width: 720px) {
+    .signals, .figures { grid-template-columns: 1fr 1fr; }
+    .connects, .stack, .layers8 { grid-template-columns: 1fr; }
+    .ladder { grid-template-columns: 1fr 1fr; }
+    .steps4 { grid-template-columns: 1fr 1fr; row-gap: 24px; }
+    .steps4::before { display: none; }
+    .es { grid-template-columns: 28px 1fr; }
+    .es span { grid-column: 2; }
+    .sen-body, .sams-body { grid-template-columns: 1fr; }
+    .sams-side { grid-template-columns: 1fr 1fr; }
+    .sen-head { grid-template-columns: 1fr; }
+    .cmp th, .cmp td { padding: 12px 10px; font-size: 14px; }
+    .cmp th { font-size: 11px; }
+    .scene { aspect-ratio: 4 / 3; }
+    .decision-banner { font-size: 12px; }
+    .emg-visual { min-height: 420px; }
+    .road { grid-template-columns: 1fr; }
+    .chip-hud { display: none; }
+    .esc-step { grid-template-columns: 48px 1fr; padding: 20px; gap: 14px; }
+    .esc-step .num { width: 48px; height: 48px; font-size: 20px; border-radius: 14px; }
+  }
+</style>
+</head>
+<body class="loading">
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <img class="loader-mark" src="./blastem-mark.png" alt="">
+    <div class="loader-bar"><i id="loaderBar"></i></div>
+    <div class="loader-count" id="loaderCount">000</div>
+  </div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor-label" id="cursorLabel"></span></div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="./index.html" aria-label="Blastem Industries home">
+    <img src="./blastem-mark.png" alt="">
+    <span>BLASTEM<small>INDUSTRIES</small></span>
+  </a>
+  <nav class="nav-links" id="navLinks" aria-label="Sentinel FO sections">
+    <a href="#concept" data-scramble>Concept</a>
+    <a href="#device" data-scramble>Device</a>
+    <a href="#simulator" data-scramble>Simulator</a>
+    <a href="#emergency" data-scramble>Emergency</a>
+    <a href="#platform" data-scramble>Platform</a>
+    <a class="nav-cta" href="#contact">Partner with us</a>
+  </nav>
+  <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><i></i></button>
+</header>
+
+<main id="top">
+  <!-- ======================= HERO ======================= -->
+  <section class="s-hero">
+    <canvas id="road" aria-hidden="true"></canvas>
+    <div class="wrap s-hero-grid">
+      <div>
+        <div class="kicker-row fade-up"><span class="eyebrow">Blastem Industries &middot; Sentinel FO</span></div>
+        <h1><span class="line"><span class="chrome">Sentinel</span></span><span class="line"><span class="glow">FO</span></span></h1>
+        <p class="sub fade-up d1">The intelligent road-safety co-pilot</p>
+        <p class="lead fade-up d1">Connecting the vehicle, the road, the environment, the driver and the emergency network into one safety loop.</p>
+        <div class="aar fade-up d2"><span>ANTICIPATE</span><span>ADAPT</span><span>RESPOND</span></div>
+        <div class="hero-actions fade-up d3">
+          <a class="btn primary magnetic" href="#simulator" data-cursor="TRY">Try the simulator
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+          <a class="btn magnetic" href="#concept" data-cursor="READ">How it works</a>
+        </div>
+        <div class="kicker-row fade-up d4" style="margin-top:28px"><span class="status-badge ip">Patent pending</span><span class="tag">OEMs &middot; Fleets &middot; Retrofit &middot; Connected mobility &middot; Drivers</span></div>
+      </div>
+      <div class="cockpit fade-up d2" id="cockpit">
+        <div class="cockpit-frame" id="cockpitFrame">
+          <div class="scan"></div>
+          <img src="./assets/sentinel/cockpit.webp" alt="Illustration: a driver's view of a highway at sunset, with Sentinel FO overlays tracing the road ahead">
+        </div>
+        <div class="chip-hud a">ROAD AHEAD<b id="hudKm">5.0 km</b></div>
+        <div class="chip-hud b">SAFE SPEED<b id="hudSafe">62 km/h</b></div>
+        <div class="chip-hud c">RISK INDEX<b id="hudRisk">24</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= WHY NOW ======================= -->
+  <section class="section" id="problem">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">01 | WHY NOW</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>Road safety is a</span></span><span class="split-line reveal-split"><span class="glow">system problem.</span></span></h2>
+      </div>
+      <div class="problem">
+        <div>
+          <p class="know" id="know"><span>The vehicle can know something.</span><span>The road can know something.</span><span>The driver can know something.</span><span class="last">But they often do not know it together.</span></p>
+          <div class="figures" data-counters>
+            <div class="figure"><b><span data-count="4.73" data-decimals="2">0</span><small>lakh</small></b><span>road accidents in India, 2024 (approx.)</span></div>
+            <div class="figure red"><b><span data-count="1.70" data-decimals="2">0</span><small>lakh</small></b><span>fatalities in the same year (approx.)</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="signals" id="signals">
+            <div class="signal" style="--sc: var(--c1)"><h4>VEHICLE</h4><p>speed &middot; motion &middot; condition</p></div>
+            <div class="signal" style="--sc: var(--c2)"><h4>ROAD</h4><p>limits &middot; curves &middot; breakers</p></div>
+            <div class="signal" style="--sc: var(--c3)"><h4>CONTEXT</h4><p>weather &middot; traffic</p></div>
+            <div class="signal" style="--sc: var(--c1)"><h4>DRIVER</h4><p>attention &middot; decision</p></div>
+            <div class="signal" style="--sc: var(--c4)"><h4>EMERGENCY</h4><p>crash &middot; location &middot; response</p></div>
+            <div class="signal" style="--sc: var(--c2)"><h4>FLEET</h4><p>shared learning</p></div>
+          </div>
+          <div class="opp reveal"><b>The opportunity:</b><span>Not another alert.</span><em>A connected decision system.</em></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= CONCEPT ======================= -->
+  <section class="section" id="concept" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">02 | THE CONCEPT</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>Connect the</span></span><span class="split-line reveal-split"><span class="chrome">disconnected.</span></span></h2>
+        <p class="sec-sub reveal">Sentinel FO is not just a device. It is the bridge between multiple safety ecosystems. Tap any source to see what it contributes.</p>
+      </div>
+      <div class="net-wrap reveal">
+        <svg viewBox="0 0 1200 560" id="netSvg" role="img" aria-label="Diagram: vehicle, road data, weather, mobile, emergency and fleet all feed Sentinel FO, which drives AI and road intelligence plus action and response">
+          <g id="netLinks"></g>
+          <g id="netPackets"></g>
+          <g id="netNodes"></g>
+        </svg>
+        <div class="net-info" id="netInfo" aria-live="polite"><h4 id="netInfoT">One safety loop</h4><p id="netInfoP">Every source feeds the same decision, so the system sees the whole situation rather than one signal at a time.</p></div>
+      </div>
+      <div class="loop-ring" id="loopRing" aria-label="The safety loop">
+        <span>Sense</span><i>→</i><span>Context</span><i>→</i><span>Predict</span><i>→</i><span>Decide</span><i>→</i><span>Assist</span><i>→</i><span>Respond</span><i>→</i><span>Learn</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= DEVICE ======================= -->
+  <section class="section" id="device" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">03 | THE EDGE DEVICE</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>The in-vehicle</span></span><span class="split-line reveal-split"><span class="glow">module.</span></span></h2>
+      </div>
+      <div class="device-grid">
+        <div class="reveal">
+        <div class="studio" id="studio">
+          <div class="studio-inner" id="studioInner">
+            <img src="./assets/sentinel/device.webp" alt="Render of the Sentinel FO in-vehicle module: a black OBD-connected unit with a speaker grille, 4G badge, status light and side button">
+            <button class="hot" style="left:58.6%;top:21.8%" data-i="0" aria-label="Motion sensing">1</button>
+            <button class="hot" style="left:79%;top:26.6%" data-i="1" aria-label="Audio alerts">2</button>
+            <button class="hot" style="left:91.9%;top:42.2%" data-i="2" aria-label="Emergency switch">3</button>
+            <button class="hot" style="left:84.7%;top:50.4%" data-i="3" aria-label="Power">4</button>
+            <button class="hot" style="left:46.3%;top:54.5%" data-i="4" aria-label="Connectivity">5</button>
+            <button class="hot" style="left:42.2%;top:61%" data-i="5" aria-label="Status light">6</button>
+            <button class="hot" style="left:27.2%;top:88%" data-i="6" aria-label="Vehicle connector">7</button>
+          </div>
+        </div>
+        <div class="hot-card" id="hotCard" aria-live="polite"><h4 id="hotT">Tap a point</h4><p id="hotP">Explore what is inside the module.</p></div>
+        </div>
+        <div>
+          <p class="lead reveal">One compact edge unit can act as the vehicle&rsquo;s safety gateway.</p>
+          <div class="connects" id="connects">
+            <div class="conn reveal" style="--sc: var(--c1)" data-k="vehicle"><h4>VEHICLE DATA</h4><p>Speed, diagnostics and vehicle-side signals</p></div>
+            <div class="conn reveal" style="--sc: var(--c1)" data-k="motion"><h4>MOTION</h4><p>IMU / acceleration / orientation</p></div>
+            <div class="conn reveal" style="--sc: var(--c1)" data-k="location"><h4>LOCATION</h4><p>GPS + route progression</p></div>
+            <div class="conn reveal" style="--sc: var(--c2)" data-k="connectivity"><h4>CONNECTIVITY</h4><p>Cellular / Wi-Fi / Bluetooth pathways</p></div>
+            <div class="conn reveal" style="--sc: var(--c2)" data-k="local"><h4>LOCAL INTELLIGENCE</h4><p>Local storage + processing when connectivity degrades</p></div>
+            <div class="conn reveal" style="--sc: var(--c2)" data-k="action"><h4>ACTION</h4><p>Audio/visual guidance + compatible control pathway</p></div>
+          </div>
+          <p class="muted reveal" style="margin-top:26px">Designed to operate as an OEM-integrated module, a retrofit gateway, a fleet device, or a safety platform that uses different subsets of the architecture.</p>
+          <div class="modes reveal"><span style="background:var(--c1)">OEM INTEGRATION</span><span style="background:var(--c2)">RETROFIT</span><span style="background:var(--c3)">FLEETS</span><span style="background:var(--c1)">MOBILE</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ARCHITECTURE ======================= -->
+  <section class="section" id="architecture" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">04 | SYSTEM ARCHITECTURE</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>End to end.</span></span></h2>
+      </div>
+      <div class="arch">
+        <div class="layer reveal" style="--sc: var(--c1)">
+          <div class="n">1</div><h3>Edge / Vehicle bridge</h3><p>Acquires and exchanges vehicle + sensor information.</p>
+          <ul><li>OBD / CAN and vehicle interfaces</li><li>GPS / network / Bluetooth / Wi-Fi</li><li>IMU and motion sensing</li><li>Accelerator / pedal-related input</li><li>Local storage + local processing</li><li>Audio / visual alerts</li><li>Vehicle control interface</li><li>Emergency communication</li></ul>
+        </div>
+        <div class="layer reveal" data-delay=".1" style="--sc: var(--c2)">
+          <div class="n">2</div><h3>Intelligence layer</h3><p>Turns raw signals into a road-aware decision.</p>
+          <ul><li>Traffic context</li><li>Weather + visibility</li><li>Legal speed limits</li><li>Speed breakers / signs / junctions</li><li>Curves / elevation / geofences</li><li>Forward road context</li><li>Optimal speed &middot; Safe speed</li><li>Risk index &middot; Adaptive decision</li></ul>
+        </div>
+        <div class="layer reveal" data-delay=".2" style="--sc: var(--c3)">
+          <div class="n">3</div><h3>User + network</h3><p>Turns decisions into coordinated safety.</p>
+          <ul><li>Driver alerts</li><li>Adaptive speed assistance</li><li>Crash detection</li><li>GPS location + severity</li><li>Emergency contacts</li><li>Nearby hospitals / police</li><li>Mobile safety app + dash-cam mode</li><li>Vehicle-to-vehicle safety sharing</li><li>Fleet analytics + learning</li></ul>
+        </div>
+      </div>
+      <div class="pipeline reveal" aria-label="Decision pipeline">
+        <span>Telemetry + context</span><i>→</i><span>Time-align &amp; normalise</span><i>→</i><span>Feature engineering</span><i>→</i><span>Context attention</span><i>→</i><span>Core AI engine</span><i>→</i><span>Risk index + adaptive speed</span>
+      </div>
+      <p class="arch-line reveal"><span>The device is the bridge.</span> <span>The platform is the brain.</span> <span>The network makes it scale.</span></p>
+    </div>
+  </section>
+
+  <!-- ======================= SIMULATOR ======================= -->
+  <section class="section" id="simulator" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">05 | DECISION INTELLIGENCE</span>
+        <div>
+          <p class="q-big reveal">The system does not ask <s>&ldquo;What is the speed limit?&rdquo;</s><em>It asks: &ldquo;What is the right speed for this situation?&rdquo;</em></p>
+        </div>
+      </div>
+      <p class="lead reveal">Legal speed is what the road permits. Optimal speed is what keeps traffic flowing. Safe speed is what the current risk allows. Sentinel FO computes them separately, then reconciles them with the road ahead. Set up a situation and watch it decide.</p>
+
+      <div class="sim reveal" id="sim">
+        <div class="sim-controls panel">
+          <div class="ctl"><label for="spd">Current speed <b><span id="spdV">70</span> km/h</b></label><input type="range" id="spd" min="0" max="140" value="70" step="1"></div>
+          <div class="ctl"><span class="lbl">Legal limit</span><div class="seg" data-ctl="legal"><button data-v="40" aria-pressed="false">40</button><button data-v="60" aria-pressed="false">60</button><button data-v="80" aria-pressed="true">80</button><button data-v="100" aria-pressed="false">100</button><button data-v="120" aria-pressed="false">120</button></div></div>
+          <div class="ctl"><span class="lbl">Weather &amp; visibility</span><div class="seg" data-ctl="weather"><button data-v="clear" aria-pressed="true">Clear</button><button data-v="rain" aria-pressed="false">Rain</button><button data-v="storm" aria-pressed="false">Heavy rain</button><button data-v="fog" aria-pressed="false">Fog</button></div></div>
+          <div class="ctl"><span class="lbl">Traffic</span><div class="seg" data-ctl="traffic"><button data-v="free" aria-pressed="true">Free</button><button data-v="moderate" aria-pressed="false">Moderate</button><button data-v="dense" aria-pressed="false">Dense</button><button data-v="jam" aria-pressed="false">Queue</button></div></div>
+          <div class="ctl"><span class="lbl">Road ahead</span><div class="seg" data-ctl="road"><button data-v="straight" aria-pressed="true">Straight</button><button data-v="curve" aria-pressed="false">Curve</button><button data-v="breaker" aria-pressed="false">Speed breaker</button><button data-v="junction" aria-pressed="false">Junction</button><button data-v="accident" aria-pressed="false">Accident ahead</button></div></div>
+        </div>
+        <div class="sim-stage">
+          <div class="scene">
+            <canvas id="scene" aria-hidden="true"></canvas>
+            <div class="scene-hud"><span class="pill">Speed <b id="hudSpd">70</b> km/h</span><span class="pill">Ahead <b id="hudAhead">clear</b></span></div>
+            <div class="decision-banner" id="banner">Cruise</div>
+          </div>
+          <dl class="outputs">
+            <div class="out" style="--sc: var(--c2)"><dt>Legal speed</dt><dd id="oLegal">80<small>km/h</small></dd><p>What the road permits</p></div>
+            <div class="out" style="--sc: var(--c1)"><dt>Optimal speed</dt><dd id="oOpt">74<small>km/h</small></dd><p>Traffic flow &middot; congestion</p></div>
+            <div class="out" style="--sc: var(--c3)"><dt>Safe speed</dt><dd id="oSafe">80<small>km/h</small></dd><p>Weather &middot; road &middot; risk</p></div>
+            <div class="out" style="--sc: var(--c4)"><dt>Risk index</dt><dd id="oRisk">12<small>/100</small></dd><p id="oTarget">Target 74 km/h</p></div>
+          </dl>
+          <div class="ladder" id="ladder">
+            <div class="rung" style="--sc: var(--c1)"><b>1 WARN</b><span>Audio / visual guidance</span></div>
+            <div class="rung" style="--sc: var(--c2)"><b>2 GUIDE</b><span>Target speed + smoother deceleration</span></div>
+            <div class="rung" style="--sc: var(--c4)"><b>3 INTERVENE</b><span>Where supported, controlled reduction</span></div>
+            <div class="rung" style="--sc: var(--c3)"><b>4 CONFIRM</b><span>Feedback informs the next decision</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="sim-note">This simulator is illustrative: it uses simple rules to show how the three speeds and the risk index relate. The real engine uses trained models over live telemetry, traffic, weather and road data. Optimal speed never overrides the safe-speed or legal limits.</p>
+    </div>
+  </section>
+
+  <!-- ======================= HORIZON ======================= -->
+  <section class="section" id="horizon" style="padding-top:0">
+    <div class="wrap horizon">
+      <div class="tall-img reveal" id="horizonImg"><img src="./assets/sentinel/horizon.webp" alt="Illustration: a glowing 5 km zone projected ahead of a car on a busy city highway at night" loading="lazy"></div>
+      <div>
+        <span class="sec-num">06 | FORWARD ROAD INTELLIGENCE</span>
+        <h2 class="sec-title sm" style="margin:16px 0 18px"><span class="split-line reveal-split"><span>From reactive</span></span><span class="split-line reveal-split"><span class="glow">to predictive.</span></span></h2>
+        <p class="lead reveal">The key advantage is the road ahead, not only the road under the vehicle.</p>
+        <div class="steps4" id="steps4">
+          <div class="st" style="--sc: var(--c1)"><div class="box">NOW</div><h4>Current position</h4><p>Vehicle state + current conditions</p></div>
+          <div class="st" style="--sc: var(--c2)"><div class="box">AHEAD</div><h4>Upcoming road</h4><p>Hazards, signs, curves, restrictions</p></div>
+          <div class="st" style="--sc: var(--c3)"><div class="box">CHANGE</div><h4>Changing conditions</h4><p>Traffic, rain, visibility, congestion</p></div>
+          <div class="st" style="--sc: var(--c4)"><div class="box">DECISION</div><h4>Before the hazard</h4><p>Warning / guidance / controlled response</p></div>
+        </div>
+        <div class="horizon-bar reveal">
+          <span class="mono-label">Forward horizon &middot; illustrated at 5 km</span>
+          <div class="hb-track" id="hbTrack"><span class="car"></span></div>
+          <div class="hb-ticks"><span>0 km</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5 km</span></div>
+        </div>
+        <span class="more-time reveal">MORE TIME TO DECIDE</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ESCALATION ======================= -->
+  <section class="section" id="escalation" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">07 | ADAPTIVE ASSISTANCE</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>When guidance</span></span><span class="split-line reveal-split"><span class="chrome">is not enough.</span></span></h2>
+        <p class="sec-sub reveal">A safety co-pilot should escalate intelligently.</p>
+      </div>
+      <div class="esc">
+        <div class="esc-media"><div class="tall-img"><img src="./assets/sentinel/fog.webp" alt="Illustration: vehicles on a winding road in dense fog at night" loading="lazy"></div></div>
+        <div>
+          <div class="esc-steps" id="escSteps">
+            <div class="esc-step" style="--sc: var(--c1)"><span class="num">1</span><div><h3>Warn</h3><p>Audio and visual guidance as soon as the situation ahead calls for it.</p></div></div>
+            <div class="esc-step" style="--sc: var(--c2)"><span class="num">2</span><div><h3>Guide</h3><p>A target speed and smoother deceleration, before the vehicle reaches the hazard.</p></div></div>
+            <div class="esc-step" style="--sc: var(--c4)"><span class="num">3</span><div><h3>Intervene</h3><p>Where supported, and only if the exceedance persists or the risk is higher, a progressive, controlled speed reduction.</p></div></div>
+            <div class="esc-step" style="--sc: var(--c3)"><span class="num">4</span><div><h3>Confirm</h3><p>The system checks how the vehicle actually responded and adjusts the next step if the target was not met.</p></div></div>
+          </div>
+          <p class="principle reveal">The principle: assist the driver first. Intervention is conditional on the risk state, the road context and the available vehicle-control pathway.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= EMERGENCY ======================= -->
+  <section class="section" id="emergency" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">08 | EMERGENCY RESPONSE</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>After the crash,</span></span><span class="split-line reveal-split"><span class="glow">it stays with you.</span></span></h2>
+        <p class="sec-sub reveal">Crash detection is not the end of the system. It starts the emergency-response loop. Run it below.</p>
+      </div>
+      <div class="emg">
+        <div class="emg-visual" id="emgVisual">
+          <img src="./assets/sentinel/emergency.webp" alt="Illustration: an ambulance arriving at a crash on a highway at night" loading="lazy">
+          <canvas id="emgMap" aria-hidden="true"></canvas>
+          <div class="emg-overlay">
+            <div class="countdown" id="countdown" role="alertdialog" aria-labelledby="cdT">
+              <h4 id="cdT">CRASH DETECTED</h4>
+              <div class="cd-ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" stroke="rgba(255,255,255,.1)"/><circle id="cdArc" cx="60" cy="60" r="52" stroke="#FF6B6B" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg><b id="cdNum">10</b></div>
+              <p>Sending emergency information unless you cancel. The window is configurable from 5 to 60 seconds.</p>
+              <button class="btn" id="cdCancel" type="button">I&rsquo;m OK &middot; cancel</button>
+            </div>
+          </div>
+        </div>
+        <div class="emg-panel panel">
+          <span class="mono-label">Emergency loop &middot; demo</span>
+          <div class="emg-steps" id="emgSteps">
+            <div class="es"><i>01</i><b>DETECT</b><span>Vehicle-side and/or mobile sensor fusion</span></div>
+            <div class="es"><i>02</i><b>LOCATE</b><span>GPS position + time + event information</span></div>
+            <div class="es"><i>03</i><b>ASSESS</b><span>Severity-related event information</span></div>
+            <div class="es"><i>04</i><b>NOTIFY</b><span>Emergency contacts + nearby response entities</span></div>
+            <div class="es"><i>05</i><b>WARN OTHERS</b><span>Share safety information with vehicles on the route</span></div>
+          </div>
+          <div class="emg-log" id="emgLog" aria-live="polite"><div>Ready. Choose an automatic or a manual emergency path.</div></div>
+          <div class="emg-actions">
+            <button class="btn red magnetic" id="simCrash" type="button" data-cursor="RUN">Simulate a crash</button>
+            <button class="btn magnetic" id="simSos" type="button" data-cursor="SOS">Press SOS</button>
+          </div>
+          <p class="standalone">Automatic and user-initiated emergency paths. Standalone mobile mode can use phone sensors for crash detection and dash-cam-like recording; the vehicle module provides a richer sensor and telemetry source.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= DEPLOYMENT ======================= -->
+  <section class="section" id="deploy" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">09 | MODULAR DEPLOYMENT</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>It can start</span></span><span class="split-line reveal-split"><span class="chrome">with a phone.</span></span></h2>
+        <p class="sec-sub reveal">Sentinel is designed as a platform, not a single hardware dependency. Different deployment modes use different subsets of the same core architecture.</p>
+      </div>
+      <div class="tabs" role="tablist" id="deployTabs">
+        <button role="tab" style="--sc: var(--c1)" aria-selected="true" data-m="0">Mobile-only</button>
+        <button role="tab" style="--sc: var(--c2)" aria-selected="false" data-m="1">Retrofit</button>
+        <button role="tab" style="--sc: var(--c3)" aria-selected="false" data-m="2">OEM-integrated</button>
+        <button role="tab" style="--sc: var(--c4)" aria-selected="false" data-m="3">Fleet / network</button>
+      </div>
+      <div class="deploy">
+        <div class="deploy-card panel" role="tabpanel" id="deployCard"></div>
+        <div class="panel">
+          <div class="layers8" id="layers8"></div>
+        </div>
+      </div>
+      <p class="chain reveal">ONE PLATFORM → MANY VEHICLES → MANY USE CASES</p>
+    </div>
+  </section>
+
+  <!-- ======================= CONNECTED ======================= -->
+  <section class="section" id="connected" style="padding-top:0">
+    <div class="wrap connected">
+      <div class="wide-img reveal"><img src="./assets/sentinel/connected.webp" alt="Illustration: vehicles on a highway linked by glowing lines to a central node, with weather and hazard icons" loading="lazy"></div>
+      <div>
+        <span class="sec-num">10 | CONNECTED MOBILITY</span>
+        <h2 class="sec-title sm" style="margin:16px 0 18px"><span class="split-line reveal-split"><span>When vehicles share</span></span><span class="split-line reveal-split"><span class="glow">safety intelligence.</span></span></h2>
+        <p class="lead reveal">A crash, hazard or road change can become information for the next vehicle.</p>
+        <div class="abcd reveal"><span class="pkt"></span>
+          <div style="--sc: var(--c1)"><b>A</b><span>event</span></div>
+          <div style="--sc: var(--c2)"><b>B</b><span>context</span></div>
+          <div style="--sc: var(--c4)"><b>C</b><span>warning</span></div>
+          <div style="--sc: var(--c3)"><b>D</b><span>safer next vehicle</span></div>
+        </div>
+        <p class="muted reveal">Accident alerts, road attributes and location-linked information are shared with vehicles on the same route, including relay options when direct connectivity is degraded.</p>
+        <span class="coop reveal">INDIVIDUAL SAFETY → COOPERATIVE SAFETY</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= PLATFORM ======================= -->
+  <section class="section" id="platform" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">11 | AI SERVER PLATFORM</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>The platform</span></span><span class="split-line reveal-split"><span class="chrome">behind it.</span></span></h2>
+        <p class="sec-sub reveal">Two consoles run on the Sentinel server platform: one for emergency coordination, one for fleets.</p>
+      </div>
+      <div class="console-tabs" role="tablist" id="conTabs">
+        <button role="tab" style="--sc: var(--c3)" aria-selected="true" data-c="sen">Sentinel Emergency Network</button>
+        <button role="tab" style="--sc: #FF7A2F" aria-selected="false" data-c="sams">SAMS fleet management</button>
+      </div>
+      <div class="browser reveal">
+        <div class="browser-bar"><i></i><i></i><i></i><span id="conUrl">Sentinel Emergency Response System</span></div>
+        <!-- Sentinel Emergency Network -->
+        <div class="con on" id="con-sen">
+          <div class="sen">
+            <div class="sen-head">
+              <div class="sen-title"><b>Sentinel Emergency Network</b><span>Unified Crash Intelligence &amp; Emergency Coordination</span></div>
+              <div class="sen-user">User profile<b>COMMAND DESK</b>Demo view</div>
+            </div>
+            <div class="sen-body">
+              <div class="sen-side">
+                <small>Operations</small><div class="on">Command Center</div><div>Incidents</div><div>Dispatch</div>
+                <small>Analytics</small><div>Operational Analytics</div>
+                <small>Systems</small><div>Notifications &amp; Reports</div><div>Hospital Readiness</div>
+              </div>
+              <div class="sen-card"><h5>Realtime emergency alerts</h5><h6>Live accident detections from mobile and telemetry</h6><div id="incList"></div></div>
+              <div class="sen-card"><h5>Emergency map</h5><h6>Map-first command view for every detected emergency</h6><div class="sen-map"><canvas id="senMap"></canvas></div></div>
+              <div class="sen-card"><h5>Notification stream</h5><div class="stream" id="stream"></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- SAMS -->
+        <div class="con" id="con-sams">
+          <div class="sams">
+            <div class="sams-head"><img src="./blastem-mark.png" alt=""><div class="t">SWARM CONTROL AUTOMOTIVE FLEET MANAGEMENT SOFTWARE<b>[ SAMS ]</b><small>NODE-LINK LIVE</small></div></div>
+            <div class="sams-body">
+              <div class="sams-side"><div>Device Manager</div><div>Device Travel Map</div><div class="on">AI Route Intelligence</div><div>Firmware OTA</div><div>Fleet Ops Center</div></div>
+              <div class="sams-main">
+                <h5>AI ROUTE INTELLIGENCE</h5>
+                <div class="sams-tabs"><span class="on">STATIC SPEED LIMITS</span><span>DYNAMIC SPEED LIMITS</span><span>LIVE ROUTE ALERTS</span></div>
+                <table class="seg-table"><thead><tr><th>SEGMENT</th><th>SPEED</th><th>REASON</th><th>STATUS</th></tr></thead><tbody id="segBody"></tbody></table>
+                <div class="sams-map"><canvas id="samsMap"></canvas></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="demo-flag">Interface recreations with demo data, for illustration. No real incidents, people or vehicles are shown.</p>
+    </div>
+  </section>
+
+  <!-- ======================= FEATURE STACK ======================= -->
+  <section class="section" id="stack" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">12 | COMPLETE CAPABILITY MAP</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>One system,</span></span><span class="split-line reveal-split"><span class="glow">not ten apps.</span></span></h2>
+      </div>
+      <div class="stack">
+        <div class="fs spot reveal" style="--sc: var(--c1)"><h4>Vehicle intelligence</h4><span class="k">01</span><p>Telemetry &middot; motion &middot; diagnostics &middot; location</p></div>
+        <div class="fs spot reveal" data-delay=".05" style="--sc: var(--c2)"><h4>Road intelligence</h4><span class="k">02</span><p>Speed limits &middot; breakers &middot; signs &middot; junctions &middot; curves</p></div>
+        <div class="fs spot reveal" style="--sc: var(--c3)"><h4>Environmental intelligence</h4><span class="k">03</span><p>Weather &middot; rain &middot; visibility &middot; road-condition context</p></div>
+        <div class="fs spot reveal" data-delay=".05" style="--sc: var(--c2)"><h4>Predictive intelligence</h4><span class="k">04</span><p>Forward road context &middot; optimal speed &middot; safe speed &middot; risk</p></div>
+        <div class="fs spot reveal" style="--sc: var(--c1)"><h4>Adaptive assistance</h4><span class="k">05</span><p>Alerts &middot; guidance &middot; conditional intervention</p></div>
+        <div class="fs spot reveal" data-delay=".05" style="--sc: var(--c4)"><h4>Emergency intelligence</h4><span class="k">06</span><p>Crash detection &middot; location &middot; severity &middot; emergency routing</p></div>
+        <div class="fs spot reveal" style="--sc: var(--c3)"><h4>Mobile safety</h4><span class="k">07</span><p>Standalone crash detection &middot; dash-cam-like recording</p></div>
+        <div class="fs spot reveal" data-delay=".05" style="--sc: var(--c2)"><h4>Connected intelligence</h4><span class="k">08</span><p>Vehicle-to-vehicle sharing &middot; fleet analytics &middot; learning</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= COMPARISON ======================= -->
+  <section class="section" id="compare" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">13 | POSITIONING</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>Most solutions solve</span></span><span class="split-line reveal-split"><span class="chrome">one moment.</span></span></h2>
+        <p class="sec-sub reveal">Sentinel is designed to close the whole loop.</p>
+      </div>
+      <div style="overflow-x:auto" class="reveal">
+        <table class="cmp">
+          <thead><tr><th>Safety function</th><th>Fragmented approach</th><th>Sentinel approach</th></tr></thead>
+          <tbody>
+            <tr><td>Speed</td><td>Fixed limit / alert</td><td>Legal + optimal + safe + context</td></tr>
+            <tr><td>Hazard</td><td>See it now</td><td>Use upcoming road context</td></tr>
+            <tr><td>Weather</td><td>Separate input</td><td>Part of the driving-risk decision</td></tr>
+            <tr><td>Crash</td><td>Detect / call</td><td>Detect → locate → notify → share</td></tr>
+            <tr><td>Connectivity</td><td>Cloud or app dependent</td><td>Local context continues when cached</td></tr>
+            <tr><td>Ecosystem</td><td>Separate tools</td><td>Vehicle + mobile + cloud + network</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="disclaimer reveal">Sentinel FO is positioned as a complementary intelligence layer, not a replacement for camera/radar ADAS or existing vehicle safety systems.</p>
+    </div>
+  </section>
+
+  <!-- ======================= ROADMAP ======================= -->
+  <section class="section" id="roadmap" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">14 | SCALE</span>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>Start with</span></span><span class="split-line reveal-split"><span class="glow">one vehicle.</span></span></h2>
+        <p class="sec-sub reveal">Build intelligence across every trip. Scale into a connected safety ecosystem.</p>
+      </div>
+      <div class="road" id="roadmapEl">
+        <div class="road-line"><i id="roadLine"></i></div>
+        <div class="rm" style="--sc: var(--c1)"><b>01</b><h4>Single vehicle</h4><p>Predictive assistance</p></div>
+        <div class="rm" style="--sc: var(--c2)"><b>02</b><h4>Connected fleet</h4><p>Shared context + analytics</p></div>
+        <div class="rm" style="--sc: var(--c3)"><b>03</b><h4>Multi-vehicle</h4><p>Cooperative safety awareness</p></div>
+        <div class="rm" style="--sc: var(--c4)"><b>04</b><h4>Mobility ecosystem</h4><p>Vehicle + road + emergency intelligence</p></div>
+      </div>
+      <p class="network-effect reveal">The more vehicles participate, the more useful road-context intelligence becomes.</p>
+      <p class="supports reveal">OEM vehicles &middot; retrofit vehicles &middot; commercial fleets &middot; public transport &middot; connected mobility services</p>
+    </div>
+  </section>
+
+  <!-- ======================= FINALE ======================= -->
+  <section class="finale" id="contact">
+    <div class="wrap">
+      <span class="eyebrow reveal">The future of road safety</span>
+      <h2><span class="split-line reveal-split"><span>Don&rsquo;t just make</span></span><span class="split-line reveal-split"><span class="orange">the vehicle smarter.</span></span><span class="split-line reveal-split"><span class="glow">Make the road aware.</span></span></h2>
+      <p class="reveal">Sentinel FO connects what the vehicle knows, what the road knows and what the network learns.</p>
+      <div class="aar reveal"><span>ANTICIPATE</span><span>ADAPT</span><span>RESPOND</span></div>
+      <p class="tagline reveal">A connected safety co-pilot for the next generation of mobility.</p>
+      <div class="hero-actions">
+        <a class="btn primary magnetic" href="mailto:admin@blastemindustries.com?subject=Sentinel%20FO" data-cursor="MAIL">Partner with us
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+        <a class="btn magnetic" href="./index.html#developments" data-cursor="BACK">All developments</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <img src="./blastem-logo.png" alt="Blastem Industries">
+        <p>Sentinel FO is developed by Blastem Industries. Patent pending.</p>
+      </div>
+      <div>
+        <h4>Sentinel FO</h4>
+        <ul><li><a href="#concept">Concept</a></li><li><a href="#simulator">Simulator</a></li><li><a href="#emergency">Emergency</a></li><li><a href="#platform">Platform</a></li></ul>
+      </div>
+      <div>
+        <h4>Blastem</h4>
+        <ul><li><a href="./index.html">Home</a></li><li><a href="./index.html#developments">Developments</a></li><li><a href="./zeronet.html">Zeronet</a></li></ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul><li><a href="mailto:admin@blastemindustries.com">Email us</a></li><li><a href="#top">Back to top ↑</a></li></ul>
+      </div>
+    </div>
+    <div class="foot-giant" aria-hidden="true">SENTINEL</div>
+    <div class="foot-base"><span>© <span data-year>2026</span> Blastem Industries</span><span>Engineered in India</span></div>
+  </div>
+</footer>
+
+<script src="./assets/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var calm = BL.calm, fine = BL.fine, $ = BL.$, $$ = BL.$$, clamp = BL.clamp, lerp = BL.lerp, mouse = BL.mouse;
+  function onVisible(el, fn, th) {
+    var done = false;
+    new IntersectionObserver(function (e) { e.forEach(function (x) { fn(x.isIntersecting); }); }, { threshold: th || 0 }).observe(el);
+  }
+
+  /* ---------------- hero road canvas: perspective highway with light trails ---------------- */
+  (function () {
+    var cv = $("#road"), ctx = cv.getContext("2d"), W, H, dpr, t = 0, visible = true, trails = [];
+    function size() { dpr = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    size(); addEventListener("resize", size);
+    for (var i = 0; i < 46; i++) trails.push({ lane: (Math.random() * 6 | 0) - 3 + Math.random() * 0.6, z: Math.random(), v: 0.15 + Math.random() * 0.35, warm: Math.random() < 0.45 });
+    onVisible(cv, function (v) { visible = v; });
+    function proj(x, z, vx, vy) { var s = 1 / (z * 6 + 0.25); return [vx + x * s * W * 0.06, vy + s * H * 0.08]; }
+    function frame() {
+      requestAnimationFrame(frame);
+      if (!visible) return;
+      t += 0.016;
+      var vx = W * (0.62 + (mouse.x / W - 0.5) * 0.04), vy = H * 0.38 + (mouse.y / H - 0.5) * 10;
+      ctx.clearRect(0, 0, W, H);
+      var g = ctx.createLinearGradient(0, vy, 0, H); g.addColorStop(0, "rgba(0,245,255,0.05)"); g.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, vy, W, H - vy);
+      // lane lines
+      for (var l = -4; l <= 4; l++) {
+        ctx.beginPath();
+        for (var z = 1; z >= 0; z -= 0.02) { var p = proj(l * 2, z, vx, vy); if (z === 1) ctx.moveTo(p[0], p[1]); else ctx.lineTo(p[0], p[1]); }
+        ctx.strokeStyle = l === 0 ? "rgba(0,245,255,0.0)" : "rgba(90,160,210," + (Math.abs(l) === 4 ? 0.35 : 0.12) + ")"; ctx.lineWidth = 1; ctx.stroke();
+      }
+      // dashes moving toward the viewer
+      for (var lane = -3; lane <= 3; lane += 2) for (var k = 0; k < 14; k++) {
+        var zz = ((k / 14) - t * 0.25) % 1; if (zz < 0) zz += 1;
+        var a = proj(lane, zz, vx, vy), b = proj(lane, Math.max(0, zz - 0.02), vx, vy);
+        ctx.strokeStyle = "rgba(122,251,255," + (0.5 * (1 - zz)) + ")"; ctx.lineWidth = 2 * (1 - zz) + 0.4;
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+      }
+      // the forward horizon arc
+      var hz = proj(0, 0.55, vx, vy), r = (1 / (0.55 * 6 + 0.25)) * W * 0.06 * 5;
+      ctx.strokeStyle = "rgba(0,245,255," + (0.35 + Math.sin(t * 2) * 0.15) + ")"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.ellipse(hz[0], hz[1], r, r * 0.18, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.globalCompositeOperation = "lighter";
+      trails.forEach(function (tr) {
+        tr.z -= tr.v * 0.016 * (calm ? 0 : 1); if (tr.z < 0) { tr.z = 1; tr.lane = (Math.random() * 6 | 0) - 3 + Math.random() * 0.6; }
+        var p1 = proj(tr.lane, tr.z, vx, vy), p2 = proj(tr.lane, Math.min(1, tr.z + 0.06), vx, vy);
+        var gr = ctx.createLinearGradient(p1[0], p1[1], p2[0], p2[1]);
+        var col = tr.warm ? "255,120,80" : "122,251,255";
+        gr.addColorStop(0, "rgba(" + col + "," + (0.9 * (1 - tr.z)) + ")"); gr.addColorStop(1, "rgba(" + col + ",0)");
+        ctx.strokeStyle = gr; ctx.lineWidth = 3 * (1 - tr.z) + 0.5; ctx.beginPath(); ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke();
+      });
+      ctx.globalCompositeOperation = "source-over";
+    }
+    if (calm) { visible = true; frame(); visible = false; } else frame();
+  })();
+
+  /* ---------------- hero cockpit tilt + live HUD ---------------- */
+  (function () {
+    var frame = $("#cockpitFrame"), wrap = $("#cockpit");
+    if (fine && !calm) wrap.addEventListener("pointermove", function (e) {
+      var r = wrap.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width - 0.5, ny = (e.clientY - r.top) / r.height - 0.5;
+      frame.style.transform = "rotateY(" + nx * 14 + "deg) rotateX(" + -ny * 14 + "deg)";
+    });
+    wrap.addEventListener("pointerleave", function () { frame.style.transform = ""; });
+    var km = 5, kmEl = $("#hudKm"), safe = $("#hudSafe"), risk = $("#hudRisk");
+    if (!calm) setInterval(function () {
+      km -= 0.1; if (km < 0.2) km = 5;
+      kmEl.textContent = km.toFixed(1) + " km";
+      var s = Math.round(48 + km * 4 + Math.random() * 2); safe.textContent = s + " km/h";
+      risk.textContent = Math.round(18 + (5 - km) * 9 + Math.random() * 3);
+    }, 400);
+  })();
+
+  /* ---------------- why now: sentences light up, signals join ---------------- */
+  (function () {
+    var spans = $$("#know span"), sig = $("#signals");
+    function upd() {
+      var r = $("#know").getBoundingClientRect(), k = clamp((innerHeight * 0.8 - r.top) / (r.height + innerHeight * 0.2), 0, 1);
+      var n = calm ? spans.length : Math.ceil(k * spans.length);
+      spans.forEach(function (s, i) { s.classList.toggle("on", i < n); });
+      var sr = sig.getBoundingClientRect(); sig.classList.toggle("joined", sr.top < innerHeight * 0.6);
+    }
+    addEventListener("scroll", upd, { passive: true }); upd();
+  })();
+
+  /* ---------------- concept network ---------------- */
+  (function () {
+    var NS = "http://www.w3.org/2000/svg";
+    var C = { c1: "#2BD9E8", c2: "#FFAE4F", c3: "#5FE3A1", c4: "#FF6B6B" };
+    var hub = { x: 820, y: 280, w: 200, h: 104 };
+    var src = [
+      { id: "vehicle", t: "VEHICLE", x: 150, y: 160, c: C.c1, d: "Speed, motion, diagnostics and condition from OBD / CAN and the module's motion sensors." },
+      { id: "road", t: "ROAD DATA", x: 370, y: 100, c: C.c2, d: "Legal limits, speed breakers, signs, junctions, curves, elevation and geofences for the current and upcoming road." },
+      { id: "weather", t: "WEATHER", x: 600, y: 80, c: C.c3, d: "Rain, visibility, temperature, wind and road-condition context that change what a safe speed is." },
+      { id: "mobile", t: "MOBILE", x: 150, y: 400, c: C.c2, d: "The driver's app: alerts, live monitoring, crash support and, in mobile-only mode, phone sensors." },
+      { id: "emergency", t: "EMERGENCY", x: 370, y: 470, c: C.c4, d: "Crash events with location, time and severity, routed to nearby hospitals, police and emergency contacts." },
+      { id: "fleet", t: "FLEET", x: 600, y: 480, c: C.c1, d: "Shared hazards and trip history from many vehicles, used for analytics and to refine the models." }
+    ];
+    var out = [
+      { id: "ai", t: "AI + ROAD", s: "INTELLIGENCE", x: 1090, y: 150, c: C.c2, d: "Predicts the optimal speed, the safe speed and a risk index for the road ahead." },
+      { id: "act", t: "ACTION +", s: "RESPONSE", x: 1090, y: 410, c: C.c3, d: "Warns, guides, intervenes where supported, and coordinates the emergency response." }
+    ];
+    var gL = $("#netLinks"), gP = $("#netPackets"), gN = $("#netNodes"), links = [];
+    function el(n, a, p) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); (p || gN).appendChild(e); return e; }
+    function link(x1, y1, x2, y2, id) {
+      var mx = (x1 + x2) / 2;
+      var p = el("path", { d: "M" + x1 + "," + y1 + " C" + mx + "," + y1 + " " + mx + "," + y2 + " " + x2 + "," + y2, class: "net-link" }, gL);
+      p.dataset.id = id; links.push(p); return p;
+    }
+    src.forEach(function (n) { link(n.x + 75, n.y, hub.x - hub.w / 2, hub.y, n.id); });
+    out.forEach(function (n) { link(hub.x + hub.w / 2, hub.y, n.x - 85, n.y, n.id); });
+    function node(n, w, h) {
+      var g = el("g", { class: "net-node", tabindex: "0", role: "button", "aria-label": n.t + (n.s ? " " + n.s : "") });
+      g.style.color = n.c;
+      el("rect", { x: n.x - w / 2, y: n.y - h / 2, width: w, height: h, rx: 14, stroke: n.c }, g);
+      if (n.s) { el("text", { x: n.x, y: n.y - 4 }, g).textContent = n.t; el("text", { x: n.x, y: n.y + 16, class: "small" }, g).textContent = n.s; }
+      else el("text", { x: n.x, y: n.y + 5 }, g).textContent = n.t;
+      function act() {
+        $$(".net-node").forEach(function (x) { x.classList.remove("on"); }); g.classList.add("on");
+        links.forEach(function (l) { l.classList.toggle("on", l.dataset.id === n.id); });
+        $("#netInfoT").textContent = n.t + (n.s ? " " + n.s : ""); $("#netInfoP").textContent = n.d;
+      }
+      g.addEventListener("click", act); g.addEventListener("mouseenter", act); g.addEventListener("focus", act);
+      g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } });
+      return g;
+    }
+    src.forEach(function (n) { node(n, 150, 58); });
+    out.forEach(function (n) { node(n, 170, 76); });
+    var hg = el("g", { class: "net-node" }); hg.style.color = "#00F5FF";
+    el("rect", { x: hub.x - hub.w / 2, y: hub.y - hub.h / 2, width: hub.w, height: hub.h, rx: 18, stroke: "#7AFBFF", "stroke-width": 2 }, hg);
+    var ht = el("text", { x: hub.x, y: hub.y - 4 }, hg); ht.textContent = "SENTINEL"; ht.style.fill = "#FFE14D"; ht.style.fontSize = "20px"; ht.style.letterSpacing = ".2em";
+    var ht2 = el("text", { x: hub.x, y: hub.y + 22 }, hg); ht2.textContent = "FO"; ht2.style.fill = "#FFE14D"; ht2.style.fontSize = "20px"; ht2.style.letterSpacing = ".2em";
+    var ring = el("rect", { x: hub.x - hub.w / 2 - 8, y: hub.y - hub.h / 2 - 8, width: hub.w + 16, height: hub.h + 16, rx: 24, fill: "none", stroke: "rgba(0,245,255,.35)" }, gN);
+    hg.addEventListener("mouseenter", function () {
+      links.forEach(function (l) { l.classList.add("on"); });
+      $("#netInfoT").textContent = "Sentinel FO"; $("#netInfoP").textContent = "The bridge: every source flows into one decision, and every decision flows back out as guidance or response.";
+    });
+    // packets
+    var packets = links.map(function (l, i) { var c = el("circle", { r: 4, fill: "#7AFBFF" }, gP); c.style.filter = "drop-shadow(0 0 6px #00F5FF)"; return { el: c, path: l, len: l.getTotalLength(), off: i / links.length }; });
+    var visible = false, t0 = performance.now();
+    onVisible($("#netSvg"), function (v) { visible = v; });
+    (function tick(now) {
+      requestAnimationFrame(tick);
+      if (!visible || calm) return;
+      var t = (now - t0) / 2600;
+      packets.forEach(function (p) { var k = (t + p.off) % 1, pt = p.path.getPointAtLength(k * p.len); p.el.setAttribute("cx", pt.x); p.el.setAttribute("cy", pt.y); p.el.setAttribute("opacity", Math.sin(k * Math.PI)); });
+      var s = 1 + Math.sin(now / 500) * 0.015; ring.setAttribute("transform", "translate(" + hub.x + "," + hub.y + ") scale(" + s + ") translate(" + -hub.x + "," + -hub.y + ")");
+    })(t0);
+    // the loop ring cycles
+    var ls = $$("#loopRing span"), li = 0;
+    setInterval(function () { ls.forEach(function (s, i) { s.classList.toggle("on", i === li); }); li = (li + 1) % ls.length; }, calm ? 1e9 : 800);
+  })();
+
+  /* ---------------- device hotspots + studio tilt ---------------- */
+  (function () {
+    var info = [
+      ["Motion sensing", "Gyroscope, accelerometer and IMU for acceleration, orientation and crash-indicative movement such as sudden deceleration or rollover.", "motion"],
+      ["Audio alerts", "A built-in speaker for audio guidance and the emergency-confirmation alarm.", "action"],
+      ["Emergency switch", "A manual SOS button. It can cancel an automatic alert inside the countdown, or trigger an emergency directly.", "action"],
+      ["Power", "Battery status for the module, alongside power from the vehicle.", "local"],
+      ["Connectivity", "4G cellular link to the Sentinel platform, with Wi-Fi and Bluetooth pathways.", "connectivity"],
+      ["Status light", "A visual indicator for alerts and the module's state.", "action"],
+      ["Vehicle connector", "Plugs into the vehicle's OBD port to read speed, diagnostics and vehicle-side signals, and to reach a compatible control pathway.", "vehicle"]
+    ];
+    var hots = $$(".hot"), T = $("#hotT"), P = $("#hotP");
+    hots.forEach(function (h) {
+      function act() {
+        hots.forEach(function (x) { x.classList.toggle("on", x === h); });
+        var d = info[+h.dataset.i]; T.textContent = d[0]; P.textContent = d[1];
+        $$(".conn").forEach(function (c) { c.classList.toggle("hl", c.dataset.k === d[2]); });
+      }
+      h.addEventListener("click", act); h.addEventListener("mouseenter", act); h.addEventListener("focus", act);
+    });
+    var studio = $("#studio"), inner = $("#studioInner");
+    if (fine && !calm) {
+      studio.addEventListener("pointermove", function (e) {
+        var r = studio.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width - 0.5, ny = (e.clientY - r.top) / r.height - 0.5;
+        inner.style.transform = "rotateY(" + nx * 8 + "deg) rotateX(" + -ny * 8 + "deg) scale(1.02)";
+      });
+      studio.addEventListener("pointerleave", function () { inner.style.transform = ""; });
+    }
+  })();
+
+  /* ---------------- decision simulator ---------------- */
+  (function () {
+    var state = { speed: 70, legal: 80, weather: "clear", traffic: "free", road: "straight" };
+    var W = { clear: { f: 1, sev: 0, n: "clear" }, rain: { f: 0.85, sev: 0.35, n: "rain" }, storm: { f: 0.68, sev: 0.65, n: "heavy rain" }, fog: { f: 0.55, sev: 0.85, n: "fog" } };
+    var TR = { free: { f: 0.95, c: 0 }, moderate: { f: 0.78, c: 0.3 }, dense: { f: 0.52, c: 0.65 }, jam: { f: 0.28, c: 1 } };
+    var RD = { straight: { cap: 999, p: 0, n: "clear" }, curve: { cap: 0.7, p: 0.4, n: "curve" }, breaker: { cap: 25, p: 0.7, n: "speed breaker" }, junction: { cap: 0.6, p: 0.5, n: "junction" }, accident: { cap: 0.45, p: 1, n: "accident" } };
+    var spd = $("#spd");
+    function setP() { spd.style.setProperty("--p", (spd.value / 140 * 100) + "%"); }
+    spd.addEventListener("input", function () { state.speed = +spd.value; $("#spdV").textContent = spd.value; setP(); compute(); });
+    $$(".seg[data-ctl]").forEach(function (seg) {
+      $$("button", seg).forEach(function (b) {
+        b.addEventListener("click", function () {
+          $$("button", seg).forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+          var k = seg.dataset.ctl; state[k] = k === "legal" ? +b.dataset.v : b.dataset.v; compute();
+        });
+      });
+    });
+    var out = {};
+    function num(el, v, unit) { el.innerHTML = Math.round(v) + "<small>" + unit + "</small>"; }
+    function compute() {
+      var w = W[state.weather], tr = TR[state.traffic], rd = RD[state.road], L = state.legal, v = state.speed;
+      var cap = rd.cap > 1 ? Math.min(rd.cap, L) : L * rd.cap;
+      var safe = Math.min(L, L * w.f, cap);
+      var opt = Math.min(L * tr.f, L);
+      var target = Math.min(opt, safe, L);
+      var over = Math.max(0, v - safe) / Math.max(safe, 10), overLegal = Math.max(0, v - L) / L;
+      var risk = clamp(6 + over * 120 + overLegal * 40 + w.sev * 14 + tr.c * 8 + rd.p * 12 * (v > target ? 1 : 0.4), 0, 100);
+      var stage = risk < 30 ? 0 : risk < 52 ? 1 : risk < 74 ? 2 : 3;
+      var labels = ["Cruise · no action", "Warn · audio + visual", "Guide · target " + Math.round(target) + " km/h", "Intervene · controlled reduction"];
+      var colors = ["#5FE3A1", "#2BD9E8", "#FFAE4F", "#FF6B6B"];
+      num($("#oLegal"), L, "km/h"); num($("#oOpt"), opt, "km/h"); num($("#oSafe"), safe, "km/h"); num($("#oRisk"), risk, "/100");
+      $("#oTarget").textContent = "Target " + Math.round(target) + " km/h";
+      var b = $("#banner"); b.textContent = labels[stage]; b.style.color = colors[stage]; b.style.borderColor = colors[stage]; b.style.boxShadow = "0 0 30px " + colors[stage] + "55";
+      $("#hudSpd").textContent = v; $("#hudAhead").textContent = rd.n === "clear" ? w.n : rd.n + " · " + w.n;
+      $$("#ladder .rung").forEach(function (r, i) {
+        r.classList.toggle("on", stage > 0 && i === stage - 1 || (stage === 3 && i === 3));
+        r.classList.toggle("past", stage > 0 && i < stage - 1);
+      });
+      out = { safe: safe, target: target, risk: risk, stage: stage, w: state.weather, road: state.road, traffic: state.traffic, v: v };
+    }
+    setP(); compute();
+
+    // scene canvas
+    var cv = $("#scene"), ctx = cv.getContext("2d"), CW, CH, dist = 0, drops = [], visible = false, cars = [];
+    for (var i = 0; i < 160; i++) drops.push({ x: Math.random(), y: Math.random(), s: 0.5 + Math.random() });
+    for (var j = 0; j < 6; j++) cars.push({ lane: j % 2 ? 0.35 : -0.35, z: Math.random() });
+    function size() { var dpr = Math.min(devicePixelRatio || 1, 2); CW = cv.clientWidth; CH = cv.clientHeight; cv.width = CW * dpr; cv.height = CH * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    size(); addEventListener("resize", size);
+    onVisible(cv, function (v) { visible = v; });
+    function P(x, z) { var vy = CH * 0.36, s = 1 - z; return [CW / 2 + x * CW * 0.9 * s * s + (out.road === "curve" ? z * z * CW * 0.35 : 0), vy + (CH - vy) * s * s]; }
+    (function frame() {
+      requestAnimationFrame(frame);
+      if (!visible) return;
+      var dt = 0.016, v = out.v || 0;
+      dist += v * dt * 0.006;
+      ctx.clearRect(0, 0, CW, CH);
+      var sky = ctx.createLinearGradient(0, 0, 0, CH * 0.36);
+      sky.addColorStop(0, out.w === "fog" ? "#2A3442" : "#0A1830"); sky.addColorStop(1, out.w === "fog" ? "#46505E" : "#18304F");
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, CW, CH * 0.36);
+      ctx.fillStyle = "#08101C"; ctx.fillRect(0, CH * 0.36, CW, CH);
+      // road surface
+      ctx.beginPath(); var a = P(-1, 0), b = P(1, 0); ctx.moveTo(a[0], a[1]);
+      for (var z = 0; z <= 1; z += 0.02) { var p = P(1, z); ctx.lineTo(p[0], p[1]); }
+      for (z = 1; z >= 0; z -= 0.02) { p = P(-1, z); ctx.lineTo(p[0], p[1]); }
+      ctx.fillStyle = "#121C2A"; ctx.fill();
+      // edges + dashes
+      [-1, 1].forEach(function (x) { ctx.beginPath(); for (var z = 0; z <= 0.98; z += 0.02) { var p = P(x, z); z ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); } ctx.strokeStyle = "rgba(122,251,255,.6)"; ctx.lineWidth = 2; ctx.stroke(); });
+      for (var k = 0; k < 12; k++) { var zz = ((k / 12) + dist) % 1; var p1 = P(0, zz), p2 = P(0, Math.min(0.99, zz + 0.03)); ctx.strokeStyle = "rgba(234,246,255," + (0.8 * (1 - zz)) + ")"; ctx.lineWidth = 4 * (1 - zz) + 0.5; ctx.beginPath(); ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); ctx.stroke(); }
+      // traffic ahead
+      var nCars = { free: 1, moderate: 3, dense: 5, jam: 6 }[out.traffic] || 1;
+      for (var c = 0; c < nCars; c++) {
+        var car = cars[c]; var cz = 0.55 + ((car.z + dist * 0.15 * (out.traffic === "jam" ? 0.1 : 0.5)) % 0.4);
+        var cp = P(car.lane, cz), sc = (1 - cz) * (1 - cz);
+        ctx.fillStyle = "#2B3A4E"; ctx.fillRect(cp[0] - 40 * sc, cp[1] - 26 * sc, 80 * sc, 26 * sc);
+        ctx.fillStyle = "#FF4D4D"; ctx.shadowColor = "#FF4D4D"; ctx.shadowBlur = 10;
+        ctx.fillRect(cp[0] - 36 * sc, cp[1] - 10 * sc, 12 * sc, 5 * sc); ctx.fillRect(cp[0] + 24 * sc, cp[1] - 10 * sc, 12 * sc, 5 * sc); ctx.shadowBlur = 0;
+      }
+      // hazard marker ahead
+      if (out.road !== "straight") {
+        var hzp = P(0, 0.72), hs = 0.08 * 0.08;
+        var colr = out.road === "accident" ? "#FF6B6B" : "#FFAE4F";
+        ctx.fillStyle = colr; ctx.shadowColor = colr; ctx.shadowBlur = 18;
+        if (out.road === "breaker") { var q1 = P(-1, 0.72), q2 = P(1, 0.72); ctx.fillRect(q1[0], q1[1] - 3, q2[0] - q1[0], 4); }
+        else { ctx.beginPath(); ctx.moveTo(hzp[0], hzp[1] - 30); ctx.lineTo(hzp[0] - 16, hzp[1] - 2); ctx.lineTo(hzp[0] + 16, hzp[1] - 2); ctx.closePath(); ctx.fill(); ctx.fillStyle = "#031018"; ctx.font = "700 14px Chakra Petch"; ctx.textAlign = "center"; ctx.fillText("!", hzp[0], hzp[1] - 7); }
+        ctx.shadowBlur = 0;
+      }
+      // safe-speed corridor tint
+      var col = ["95,227,161", "43,217,232", "255,174,79", "255,107,107"][out.stage || 0];
+      var grd = ctx.createLinearGradient(0, CH, 0, CH * 0.4); grd.addColorStop(0, "rgba(" + col + ",.28)"); grd.addColorStop(1, "rgba(" + col + ",0)");
+      ctx.fillStyle = grd; ctx.beginPath(); var e1 = P(-0.9, 0), e2 = P(0.9, 0), e3 = P(0.15, 0.7), e4 = P(-0.15, 0.7);
+      ctx.moveTo(e1[0], e1[1]); ctx.lineTo(e2[0], e2[1]); ctx.lineTo(e3[0], e3[1]); ctx.lineTo(e4[0], e4[1]); ctx.closePath(); ctx.fill();
+      // weather
+      if (out.w === "rain" || out.w === "storm") {
+        var n = out.w === "storm" ? 160 : 70; ctx.strokeStyle = "rgba(170,210,255,.45)"; ctx.lineWidth = 1;
+        for (var d = 0; d < n; d++) { var dr = drops[d]; dr.y += 0.02 * dr.s; dr.x -= 0.002; if (dr.y > 1) { dr.y = 0; dr.x = Math.random(); } if (dr.x < 0) dr.x = 1; ctx.beginPath(); ctx.moveTo(dr.x * CW, dr.y * CH); ctx.lineTo(dr.x * CW - 3, dr.y * CH + 12 * dr.s); ctx.stroke(); }
+      }
+      if (out.w === "fog") { var fg = ctx.createLinearGradient(0, 0, 0, CH); fg.addColorStop(0, "rgba(160,170,185,.85)"); fg.addColorStop(.55, "rgba(140,150,165,.55)"); fg.addColorStop(1, "rgba(120,130,145,.1)"); ctx.fillStyle = fg; ctx.fillRect(0, 0, CW, CH); }
+    })();
+  })();
+
+  /* ---------------- horizon: scroll parallax + hazards moving toward the car ---------------- */
+  (function () {
+    var img = $("#horizonImg img"), track = $("#hbTrack");
+    var hz = [["Speed breaker", 1.4, ""], ["Rain cell", 2.6, "g"], ["Junction", 3.5, ""], ["Accident ahead", 4.6, "r"]].map(function (h) {
+      var s = document.createElement("span"); s.className = "hz " + h[2]; s.textContent = h[0]; track.appendChild(s); return { el: s, km: h[1] };
+    });
+    var visible = false; onVisible(track, function (v) { visible = v; });
+    (function tick() {
+      requestAnimationFrame(tick);
+      if (!visible) return;
+      hz.forEach(function (h) { if (!calm) { h.km -= 0.006; if (h.km < 0.15) h.km = 5; } h.el.style.left = (8 + h.km / 5 * 86) + "%"; h.el.style.opacity = h.km < 0.6 ? h.km / 0.6 : 1; });
+    })();
+    addEventListener("scroll", function () {
+      var r = img.parentNode.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight || calm) return;
+      img.style.transform = "translate3d(0," + ((r.top / innerHeight) * -50 - 20) + "px,0)";
+    }, { passive: true });
+    var st = $$("#steps4 .st");
+    onVisible($("#steps4"), function (v) { if (v) st.forEach(function (s, i) { setTimeout(function () { s.classList.add("in"); }, calm ? 0 : i * 250); }); }, 0.4);
+  })();
+
+  /* ---------------- escalation: steps light as they reach the middle of the screen ---------------- */
+  (function () {
+    var steps = $$("#escSteps .esc-step");
+    function upd() { steps.forEach(function (s) { s.classList.toggle("on", calm || s.getBoundingClientRect().top < innerHeight * 0.62); }); }
+    addEventListener("scroll", upd, { passive: true }); upd();
+  })();
+
+  /* ---------------- emergency demo ---------------- */
+  (function () {
+    var vis = $("#emgVisual"), cd = $("#countdown"), num = $("#cdNum"), arc = $("#cdArc"), log = $("#emgLog"), steps = $$("#emgSteps .es");
+    var cv = $("#emgMap"), ctx = cv.getContext("2d"), CW, CH, running = false, timer = null, phase = "idle", endpoints = [], t0 = 0, CIRC = 326.7;
+    function size() { var dpr = Math.min(devicePixelRatio || 1, 2); CW = cv.clientWidth; CH = cv.clientHeight; cv.width = CW * dpr; cv.height = CH * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    size(); addEventListener("resize", size);
+    function line(txt, cls) { var d = document.createElement("div"); d.textContent = txt; if (cls) d.className = cls; log.appendChild(d); while (log.children.length > 9) log.removeChild(log.firstChild); }
+    function step(i, state) { steps[i].classList.remove("on", "done"); if (state) steps[i].classList.add(state); }
+    function reset() { clearInterval(timer); steps.forEach(function (s) { s.classList.remove("on", "done"); }); cd.classList.remove("show"); vis.classList.remove("active"); phase = "idle"; endpoints = []; log.innerHTML = ""; }
+    function dispatch(manual) {
+      phase = "dispatch"; vis.classList.add("active"); cd.classList.remove("show");
+      var seq = [
+        [0, function () { step(0, "done"); step(1, "on"); line("LOCATE  17.4°N 78.5°E · " + new Date().toLocaleTimeString() + " (demo)"); }],
+        [700, function () { step(1, "done"); step(2, "on"); line(manual ? "ASSESS  manual SOS · severity: user-reported" : "ASSESS  severity HIGH · rollover-like motion", "warn"); }],
+        [1500, function () {
+          step(2, "done"); step(3, "on");
+          endpoints = [{ n: "Hospital · 2.1 km", a: -0.6, r: 0.36, c: "#5FE3A1" }, { n: "Police · 3.4 km", a: 2.3, r: 0.4, c: "#2BD9E8" }, { n: "Emergency contact", a: 1.1, r: 0.3, c: "#FFAE4F" }];
+          line("NOTIFY  nearest hospital, police station and emergency contact");
+        }],
+        [2600, function () { endpoints.forEach(function (e) { e.ok = true; }); line("        ✓ delivered: location, time, event, severity, vehicle ID", "ok"); }],
+        [3300, function () { step(3, "done"); step(4, "on"); phase = "warn"; line("WARN    route alert shared with vehicles approaching this segment"); }],
+        [4600, function () { step(4, "done"); line("Loop complete. Event stored for analytics and evidence support.", "ok"); running = false; }]
+      ];
+      seq.forEach(function (s) { setTimeout(s[1], calm ? 0 : s[0]); });
+    }
+    function crash() {
+      if (running) return; reset(); running = true; phase = "detect"; t0 = performance.now();
+      step(0, "on"); line("DETECT  sudden deceleration + abnormal orientation (simulated)", "warn");
+      cd.classList.add("show"); vis.classList.add("active");
+      var n = 10; num.textContent = n; arc.style.transition = "none"; arc.style.strokeDashoffset = 0;
+      requestAnimationFrame(function () { arc.style.transition = "stroke-dashoffset 1s linear"; });
+      timer = setInterval(function () {
+        n--; num.textContent = n; arc.style.strokeDashoffset = CIRC * (1 - n / 10);
+        if (n <= 0) { clearInterval(timer); line("No cancel within the window. Sending emergency information."); dispatch(false); }
+      }, calm ? 120 : 1000);
+    }
+    $("#simCrash").addEventListener("click", crash);
+    $("#cdCancel").addEventListener("click", function () {
+      clearInterval(timer); cd.classList.remove("show"); vis.classList.remove("active"); step(0, "done");
+      line("Cancelled by the driver. Nothing was sent.", "ok"); running = false; phase = "idle";
+    });
+    $("#simSos").addEventListener("click", function () {
+      if (running) return; reset(); running = true; t0 = performance.now();
+      step(0, "done"); line("SOS pressed: manual emergency mode, sending immediately.", "warn"); dispatch(true);
+    });
+    var visible = false; onVisible(cv, function (v) { visible = v; });
+    (function frame(now) {
+      requestAnimationFrame(frame);
+      if (!visible) return;
+      ctx.clearRect(0, 0, CW, CH);
+      if (phase === "idle") return;
+      var cx = CW / 2, cy = CH / 2, t = Math.max(0, now - t0) / 1000, R = Math.min(CW, CH);
+      for (var i = 0; i < 3; i++) { var k = ((t * 0.6 + i / 3) % 1); ctx.strokeStyle = "rgba(255,107,107," + (1 - k) * 0.7 + ")"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, k * R * 0.45, 0, 7); ctx.stroke(); }
+      ctx.fillStyle = "#FF6B6B"; ctx.shadowColor = "#FF6B6B"; ctx.shadowBlur = 20; ctx.beginPath(); ctx.arc(cx, cy, 8, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+      endpoints.forEach(function (e) {
+        var ex = cx + Math.cos(e.a) * e.r * R, ey = cy + Math.sin(e.a) * e.r * R;
+        ctx.strokeStyle = e.c; ctx.globalAlpha = .6; ctx.setLineDash([5, 6]); ctx.lineDashOffset = -t * 30; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(ex, ey); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+        var k = (t * 0.8) % 1; ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(cx + (ex - cx) * k, cy + (ey - cy) * k, 3, 0, 7); ctx.fill();
+        ctx.fillStyle = e.c; ctx.beginPath(); ctx.arc(ex, ey, e.ok ? 9 : 6, 0, 7); ctx.fill();
+        ctx.fillStyle = "#EAF6FF"; ctx.font = "500 12px IBM Plex Mono, monospace"; ctx.textAlign = "left";
+        var lab = (e.ok ? "✓ " : "") + e.n, lw = ctx.measureText(lab).width, lx = ex < cx ? ex - 14 - lw : ex + 14;
+        lx = clamp(lx, 10, CW - lw - 10); ctx.fillText(lab, lx, ey + (lx < ex && lx + lw > ex ? -14 : 4));
+      });
+      if (phase === "warn") {
+        ctx.textAlign = "center"; ctx.fillStyle = "#FFAE4F"; ctx.font = "600 12px IBM Plex Mono, monospace";
+        for (var v = 0; v < 3; v++) { var vx = cx - 26 + v * 26, vy = CH - 58; ctx.fillRect(vx - 7, vy - 4, 14, 8); }
+        ctx.fillText("⚠ alert sent to vehicles on route", cx, CH - 30);
+      }
+    })(performance.now());
+  })();
+
+  /* ---------------- deployment tabs ---------------- */
+  (function () {
+    var L = [["Vehicle", "Telemetry · motion · diagnostics"], ["Road", "Limits · breakers · signs · curves"], ["Environmental", "Weather · rain · visibility"], ["Predictive", "Optimal · safe speed · risk"], ["Adaptive assistance", "Alerts · guidance · intervention"], ["Emergency", "Crash · location · routing"], ["Mobile safety", "Phone crash detection · dash-cam"], ["Connected", "V2V · fleet analytics · learning"]];
+    var modes = [
+      { n: "Mobile-only", base: "Crash detection from the phone", items: ["Location", "Emergency alerts", "Dash-cam-like recording"], on: [5, 6] },
+      { n: "Retrofit", base: "An edge device in an existing vehicle", items: ["Vehicle data", "Road context", "Adaptive assistance"], on: [0, 1, 2, 3, 4, 5, 6] },
+      { n: "OEM-integrated", base: "Native vehicle signals", items: ["Vehicle control pathways", "Embedded user experience"], on: [0, 1, 2, 3, 4, 5, 6] },
+      { n: "Fleet / network", base: "Fleet analytics", items: ["Shared hazards", "Model refinement", "Cooperative safety"], on: [0, 1, 2, 3, 4, 5, 6, 7] }
+    ];
+    var grid = $("#layers8");
+    grid.innerHTML = '<span class="mono-label" style="grid-column:1/-1">Capability layers this mode draws on (illustrative)</span>' + L.map(function (l) { return '<div class="l8"><b>' + l[0] + "</b><span>" + l[1] + "</span></div>"; }).join("");
+    var cells = $$(".l8", grid), tabs = $$("#deployTabs button");
+    function show(i) {
+      var m = modes[i];
+      tabs.forEach(function (t, j) { t.setAttribute("aria-selected", i === j); });
+      $("#deployCard").innerHTML = "<span class='mono-label'>Mode " + String(i + 1).padStart(2, "0") + "</span><h3>" + m.n + "</h3><p class='base'>" + m.base + "</p><ul>" + m.items.map(function (x, k) { return "<li style='animation-delay:" + k * 0.08 + "s'>" + x + "</li>"; }).join("") + "</ul>";
+      cells.forEach(function (c, k) { setTimeout(function () { c.classList.toggle("on", m.on.indexOf(k) > -1); }, calm ? 0 : k * 50); });
+    }
+    tabs.forEach(function (t, i) { t.addEventListener("click", function () { show(i); }); });
+    show(0);
+  })();
+
+  /* ---------------- platform consoles (demo data) ---------------- */
+  (function () {
+    var tabs = $$("#conTabs button");
+    tabs.forEach(function (t) {
+      t.addEventListener("click", function () {
+        tabs.forEach(function (x) { x.setAttribute("aria-selected", x === t); });
+        $$(".con").forEach(function (c) { c.classList.toggle("on", c.id === "con-" + t.dataset.c); });
+        $("#conUrl").textContent = t.dataset.c === "sen" ? "Sentinel Emergency Response System" : "SAMS · Fleet console";
+        if (t.dataset.c === "sams") sizeSams();
+      });
+    });
+    // Sentinel incidents feed
+    var places = ["Ring Road, Sector 4", "NH-44, km 212", "Old City flyover", "Airport Expressway", "Outer Ring Rd exit 9", "Lake View Road"];
+    var kinds = [["Crash detected", "HIGH"], ["Severe rollover detected", "HIGH"], ["Hard impact, vehicle stopped", "MED"], ["SOS pressed by driver", "HIGH"]];
+    var incList = $("#incList"), stream = $("#stream"), n = 90, pins = [];
+    function addInc() {
+      n++; var k = kinds[(Math.random() * kinds.length) | 0], pl = places[(Math.random() * places.length) | 0];
+      var d = document.createElement("div"); d.className = "inc";
+      d.innerHTML = "<b>INC-DEMO-" + n + "</b>" + k[0] + "<br><span style='opacity:.7'>" + pl + " · source: sentinel_" + (Math.random() < .5 ? "android" : "module") + "</span><br><span class='sev " + (k[1] === "MED" ? "med" : "") + "'>" + k[1] + " · REGISTERED</span>";
+      incList.insertBefore(d, incList.firstChild); while (incList.children.length > 2) incList.removeChild(incList.lastChild);
+      var s = document.createElement("div"); s.textContent = "Crash alert: " + k[1] + " near " + pl + " · hospital pre-alerted · contact notified";
+      stream.insertBefore(s, stream.firstChild); while (stream.children.length > 5) stream.removeChild(stream.lastChild);
+      pins.push({ x: 0.15 + Math.random() * 0.7, y: 0.15 + Math.random() * 0.7, t: performance.now(), hi: k[1] === "HIGH" }); if (pins.length > 6) pins.shift();
+    }
+    for (var i = 0; i < 3; i++) addInc();
+    var senVisible = false; onVisible($("#con-sen"), function (v) { senVisible = v; });
+    setInterval(function () { if (senVisible && !calm) addInc(); }, 3800);
+    var sm = $("#senMap"), sctx = sm.getContext("2d"), SW, SH;
+    function sizeSen() { var dpr = Math.min(devicePixelRatio || 1, 2); SW = sm.clientWidth; SH = sm.clientHeight; sm.width = SW * dpr; sm.height = SH * dpr; sctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    sizeSen(); addEventListener("resize", sizeSen);
+    var roads = []; for (var r = 0; r < 14; r++) roads.push([Math.random(), Math.random(), Math.random(), Math.random(), Math.random() < .3]);
+    (function draw(now) {
+      requestAnimationFrame(draw); if (!senVisible) return;
+      sctx.fillStyle = "#E9EFE4"; sctx.fillRect(0, 0, SW, SH);
+      sctx.fillStyle = "#CFE3F0"; sctx.beginPath(); sctx.ellipse(SW * .78, SH * .3, SW * .14, SH * .1, .4, 0, 7); sctx.fill();
+      roads.forEach(function (q) { sctx.strokeStyle = q[4] ? "#F2B866" : "#FFFFFF"; sctx.lineWidth = q[4] ? 4 : 2.5; sctx.beginPath(); sctx.moveTo(q[0] * SW, q[1] * SH); sctx.quadraticCurveTo(SW / 2, SH / 2, q[2] * SW, q[3] * SH); sctx.stroke(); });
+      pins.forEach(function (p) {
+        var x = p.x * SW, y = p.y * SH, k = (Math.max(0, now - p.t) / 1400) % 1, c = p.hi ? "242,107,58" : "224,160,44";
+        sctx.strokeStyle = "rgba(" + c + "," + (1 - k) + ")"; sctx.lineWidth = 2; sctx.beginPath(); sctx.arc(x, y, 6 + k * 22, 0, 7); sctx.stroke();
+        sctx.fillStyle = "rgb(" + c + ")"; sctx.beginPath(); sctx.arc(x, y, 6, 0, 7); sctx.fill();
+      });
+    })(performance.now());
+    // SAMS route table
+    var segs = [["MG Road → Station Rd", 40, "School zone", "static"], ["Ring Rd km 4–7", 60, "Curve cluster", "static"], ["Flyover ramp", 30, "Speed breaker", "static"], ["NH-44 km 210–214", 50, "Rain, low visibility", "dyn"], ["Expressway exit 9", 45, "Congestion queue", "dyn"], ["Tech Park loop", 35, "Construction", "dyn"]];
+    var body = $("#segBody");
+    body.innerHTML = segs.map(function (s, i) { return "<tr style='animation-delay:" + i * .06 + "s'><td>" + s[0] + "</td><td>" + s[1] + " km/h</td><td>" + s[2] + "</td><td><span class='pillx " + (s[3] === "dyn" ? "dyn" : "") + "'>" + (s[3] === "dyn" ? "DYNAMIC · LIVE" : "SAVED") + "</span></td></tr>"; }).join("");
+    var am = $("#samsMap"), actx = am.getContext("2d"), AW, AH;
+    function sizeSams() { var dpr = Math.min(devicePixelRatio || 1, 2); AW = am.clientWidth; AH = am.clientHeight; am.width = AW * dpr; am.height = AH * dpr; actx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    addEventListener("resize", sizeSams);
+    var fleet = []; for (var f = 0; f < 9; f++) fleet.push({ k: Math.random(), v: 0.0006 + Math.random() * 0.0012 });
+    (function draw() {
+      requestAnimationFrame(draw); if (!$("#con-sams").classList.contains("on") || !AW) return;
+      actx.fillStyle = "#1E2A33"; actx.fillRect(0, 0, AW, AH);
+      actx.strokeStyle = "rgba(255,255,255,.05)"; for (var x = 0; x < AW; x += 24) { actx.beginPath(); actx.moveTo(x, 0); actx.lineTo(x, AH); actx.stroke(); }
+      function rp(k) { return [20 + k * (AW - 40), AH / 2 + Math.sin(k * 7) * AH * 0.28]; }
+      actx.lineWidth = 5; for (var s = 0; s < 60; s++) { var a = rp(s / 60), b = rp((s + 1) / 60); actx.strokeStyle = (s > 18 && s < 26) || (s > 40 && s < 47) ? "#FF7A2F" : "#5FE3A1"; actx.beginPath(); actx.moveTo(a[0], a[1]); actx.lineTo(b[0], b[1]); actx.stroke(); }
+      fleet.forEach(function (fv) { if (!calm) fv.k = (fv.k + fv.v) % 1; var p = rp(fv.k); actx.fillStyle = "#fff"; actx.shadowColor = "#FF7A2F"; actx.shadowBlur = 10; actx.beginPath(); actx.arc(p[0], p[1], 4, 0, 7); actx.fill(); actx.shadowBlur = 0; });
+    })();
+  })();
+
+  /* ---------------- roadmap line fills on scroll ---------------- */
+  (function () {
+    var el = $("#roadmapEl"), line = $("#roadLine"), rms = $$(".rm", el);
+    function upd() {
+      var r = el.getBoundingClientRect(), k = calm ? 1 : clamp((innerHeight * 0.85 - r.top) / (innerHeight * 0.5), 0, 1);
+      line.style.transform = "scaleX(" + k + ")";
+      rms.forEach(function (m, i) { m.classList.toggle("on", k >= i / 3 - 0.01); });
+    }
+    addEventListener("scroll", upd, { passive: true }); upd();
+  })();
+})();
+</script>
+</body>
+</html>
