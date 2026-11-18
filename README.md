@@ -16,3 +16,7 @@ Static pages served by GitHub Pages.
 The two TrackWise pages are referenced from inside the shipped apps and from both store
 listings. Their URLs must not change, and they must not 404: a dead privacy policy URL is a
 compliance failure against a live app on both stores.
+
+## Publishing
+
+To host the site on our own server at blastemindustries.com, see [`deploy/README.md`](deploy/README.md).
