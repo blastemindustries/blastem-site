@@ -4,7 +4,9 @@ Static pages served by GitHub Pages.
 
 | Page | Purpose |
 |---|---|
-| `index.html` | Zeronet landing page |
+| `index.html` | Blastem Industries home: animated, interactive company site featuring both apps |
+| `zeronet.html` | Zeronet product page (was `index.html`) |
+| `blastem-logo.png`, `blastem-mark.png` | Full logo, and the cropped mark used for the nav and favicon |
 | `trackwise-privacy.html` | TrackWise privacy policy — **submitted to the App Store and Google Play** |
 | `trackwise-terms.html` | TrackWise terms of use — linked from the app's first-run consent screen |
 

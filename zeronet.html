@@ -1,0 +1,897 @@
+<title>Zeronet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    color-scheme: dark;
+    --void: #000208;
+    --ink: #03070F;
+    --panel: rgba(255, 255, 255, 0.045);
+    --panel-strong: rgba(255, 255, 255, 0.075);
+    --edge: rgba(255, 255, 255, 0.11);
+    --edge-bright: rgba(0, 245, 255, 0.38);
+    --cyan: #00F5FF;
+    --ice: #7AFBFF;
+    --violet: #C7A7FF;
+    --amber: #FFC24B;
+    --text: #EAF6FA;
+    --muted: #93A9B8;
+    --dim: #5E7382;
+
+    --display: "Chakra Petch", "Trebuchet MS", sans-serif;
+    --body: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(760px 520px at 12% -6%, rgba(0, 245, 255, 0.10), transparent 62%),
+      radial-gradient(680px 520px at 92% 8%, rgba(138, 43, 226, 0.13), transparent 58%),
+      radial-gradient(900px 700px at 60% 108%, rgba(0, 120, 255, 0.10), transparent 60%),
+      linear-gradient(160deg, var(--void), var(--ink) 45%, var(--void));
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 0 0;
+  }
+
+  ::selection { background: rgba(0, 245, 255, 0.28); }
+
+  a { color: var(--ice); }
+
+  :focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+  }
+
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; }
+
+  .eyebrow {
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* ---------- masthead: the company mark the app itself opens with ---------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding-block: 54px 10px;
+  }
+
+  /* The mark set in glass: a frosted pane lifted off the page, lit from the top-left, with a
+     sheen that travels across it. The blur samples the aurora washes behind the page, so the
+     pane carries their colour the way real glass carries what is behind it. */
+  .logo-glass {
+    position: relative;
+    width: 196px;
+    height: 196px;
+    display: grid;
+    place-items: center;
+    border-radius: 54px;
+    padding: 26px;
+    isolation: isolate;
+    background:
+      linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.03) 42%, rgba(255, 255, 255, 0.07));
+    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    box-shadow:
+      0 26px 60px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* The cyan bloom of the mark's own circuitry, escaping the pane. */
+  .logo-glass::before {
+    content: "";
+    position: absolute;
+    inset: -18%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 245, 255, 0.30), rgba(0, 245, 255, 0) 66%);
+    filter: blur(6px);
+  }
+
+  /* The lit edge and the travelling sheen. */
+  .logo-glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.42) 50%, transparent 62%);
+    background-size: 260% 100%;
+    background-position: 190% 0;
+    animation: sheen 4.6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes sheen {
+    0% { background-position: 190% 0; }
+    42% { background-position: -90% 0; }
+    100% { background-position: -90% 0; }
+  }
+
+  .logo-glass img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 8px 26px rgba(0, 200, 255, 0.45));
+  }
+
+  .masthead .eyebrow { color: rgba(0, 245, 255, 0.72); letter-spacing: 0.34em; }
+
+  /* ---------- hero ---------- */
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 48px;
+    align-items: center;
+    padding-block: 34px 72px;
+  }
+
+  .wordmark {
+    font-family: var(--display);
+    font-size: clamp(56px, 11vw, 104px);
+    font-weight: 700;
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin: 14px 0 0;
+    background: linear-gradient(94deg, #FFFFFF 12%, var(--ice) 52%, var(--cyan) 88%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .thesis {
+    font-size: clamp(19px, 2.3vw, 24px);
+    line-height: 1.42;
+    margin: 20px 0 0;
+    max-width: 30ch;
+    color: #D6EAF2;
+  }
+
+  .sub {
+    margin: 18px 0 0;
+    max-width: 46ch;
+    color: var(--muted);
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 26px;
+  }
+
+  .chip {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    border: 1px solid var(--edge);
+    border-radius: 999px;
+    padding: 6px 13px;
+    background: var(--panel);
+  }
+
+  /* ---------- the console ---------- */
+
+  .console {
+    border: 1px solid var(--edge);
+    border-radius: 30px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
+      rgba(2, 8, 16, 0.72);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    padding: 20px;
+    max-width: 380px;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .console-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    padding: 7px 13px;
+    border-radius: 999px;
+    border: 1px solid var(--edge-bright);
+    color: var(--cyan);
+    background: rgba(0, 245, 255, 0.08);
+  }
+
+  .status .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 10px currentColor;
+  }
+
+  .console[data-state="alert"] .status {
+    color: var(--amber);
+    border-color: rgba(255, 194, 75, 0.45);
+    background: rgba(255, 194, 75, 0.10);
+  }
+
+  .console[data-state="arrived"] .status {
+    color: var(--ice);
+    border-color: rgba(122, 251, 255, 0.5);
+    background: rgba(122, 251, 255, 0.12);
+  }
+
+  .gps {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.03em;
+  }
+
+  .radar {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 100%;
+    margin: 18px 0 6px;
+    display: grid;
+    place-items: center;
+  }
+
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 245, 255, 0.16);
+  }
+
+  .ring.r1 { inset: 4%; }
+  .ring.r2 { inset: 20%; }
+  .ring.r3 { inset: 36%; border-color: rgba(0, 245, 255, 0.24); }
+  .ring.r4 { inset: 52%; border-color: rgba(0, 245, 255, 0.3); }
+
+  .sweep {
+    position: absolute;
+    inset: 4%;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 245, 255, 0.5);
+    opacity: 0;
+  }
+
+  .console[data-running="1"] .sweep { animation: sweep 2.6s ease-out infinite; }
+  .console[data-state="alert"] .sweep { border-color: rgba(255, 194, 75, 0.6); animation-duration: 1.1s; }
+
+  @keyframes sweep {
+    0% { transform: scale(0.42); opacity: 0.85; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+
+  .pin {
+    position: absolute;
+    top: 21%;
+    left: 63%;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 0 5px rgba(0, 245, 255, 0.14), 0 0 22px rgba(0, 245, 255, 0.8);
+  }
+
+  .readout { text-align: center; position: relative; }
+
+  .distance {
+    font-family: var(--display);
+    font-size: 62px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .distance span { font-size: 22px; color: var(--muted); margin-left: 6px; letter-spacing: 0.06em; }
+
+  .to {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .console-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .cell {
+    border: 1px solid var(--edge);
+    border-radius: 16px;
+    padding: 11px 13px;
+    background: var(--panel);
+  }
+
+  .cell dt {
+    font-family: var(--display);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .cell dd {
+    margin: 5px 0 0;
+    font-family: var(--mono);
+    font-size: 16px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+  }
+
+  .alarm {
+    margin-top: 14px;
+    border: 1px solid rgba(255, 194, 75, 0.42);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 194, 75, 0.14), rgba(255, 194, 75, 0.05));
+    padding: 14px;
+  }
+
+  .alarm-title {
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--amber);
+  }
+
+  .alarm-body { font-size: 14px; color: #F2E4C6; margin-top: 4px; }
+
+  .alarm-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+  button {
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 13px;
+    padding: 11px 14px;
+    cursor: pointer;
+    border: 1px solid var(--edge);
+    background: var(--panel-strong);
+    color: var(--text);
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+  }
+
+  button:hover { border-color: var(--edge-bright); transform: translateY(-1px); }
+
+  .btn-primary {
+    flex: 1;
+    border: none;
+    color: #04131C;
+    background: linear-gradient(90deg, var(--cyan), var(--ice));
+    box-shadow: 0 10px 26px rgba(0, 245, 255, 0.22);
+  }
+
+  .console-actions { display: flex; gap: 8px; margin-top: 16px; }
+
+  /* ---------- sections ---------- */
+
+  section { padding-block: 64px; border-top: 1px solid rgba(255, 255, 255, 0.07); }
+
+  .section-head { max-width: 58ch; }
+
+  .section-head h2 { font-size: clamp(28px, 4vw, 40px); margin-top: 12px; }
+
+  .section-head p { color: var(--muted); margin: 14px 0 0; }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+    margin-top: 40px;
+    counter-reset: step;
+  }
+
+  .step {
+    border-top: 1px solid var(--edge-bright);
+    padding-top: 18px;
+  }
+
+  .step::before {
+    counter-increment: step;
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+  }
+
+  .step h3 { font-size: 18px; margin-top: 10px; }
+
+  .step p { color: var(--muted); font-size: 15px; margin: 8px 0 0; }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .feature {
+    border: 1px solid var(--edge);
+    border-radius: 22px;
+    background: var(--panel);
+    padding: 22px;
+  }
+
+  .feature h3 { font-size: 17px; letter-spacing: 0.01em; }
+
+  .feature p { color: var(--muted); font-size: 15px; margin: 10px 0 0; }
+
+  .feature .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .quote {
+    margin-top: 14px;
+    padding: 11px 13px;
+    border-left: 2px solid var(--edge-bright);
+    background: rgba(0, 245, 255, 0.05);
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #CFE9F2;
+    border-radius: 0 10px 10px 0;
+  }
+
+  .langs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 32px;
+  }
+
+  .lang {
+    border: 1px solid var(--edge);
+    border-radius: 14px;
+    padding: 12px 16px;
+    background: var(--panel);
+    min-width: 132px;
+  }
+
+  .lang b { display: block; font-family: var(--body); font-size: 17px; font-weight: 500; }
+
+  .lang span { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: 0.06em; }
+
+  .specs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 0;
+    margin-top: 36px;
+    border: 1px solid var(--edge);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .spec {
+    padding: 20px;
+    border-right: 1px solid var(--edge);
+    background: var(--panel);
+  }
+
+  .spec:last-child { border-right: none; }
+
+  .spec dt {
+    font-family: var(--display);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .spec dd { margin: 8px 0 0; font-size: 15px; color: var(--text); }
+
+  footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding-block: 44px 60px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .footer-glass {
+    width: 74px;
+    height: 74px;
+    display: grid;
+    place-items: center;
+    padding: 10px;
+    border-radius: 22px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03));
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  footer img { width: 100%; height: auto; opacity: 0.95; }
+
+  footer .f-name { font-family: var(--display); font-size: 14px; letter-spacing: 0.22em; text-transform: uppercase; }
+
+  footer .f-line { color: var(--dim); font-size: 13px; margin-top: 3px; }
+
+  footer .f-right { margin-left: auto; color: var(--dim); font-family: var(--mono); font-size: 12px; }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; gap: 38px; padding-block: 20px 56px; }
+    .masthead { padding-block: 34px 4px; }
+    .logo-glass { width: 156px; height: 156px; border-radius: 44px; padding: 20px; }
+    .distance { font-size: 54px; }
+    .spec { border-right: none; border-bottom: 1px solid var(--edge); }
+    .spec:last-child { border-bottom: none; }
+    footer .f-right { margin-left: 0; width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-glass::after { animation: none; background-position: 50% 0; }
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="logo-glass">
+      <img src="blastem-logo.png" alt="Blastem Industries">
+    </div>
+  </header>
+
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Android &middot; GPS proximity alarm</p>
+      <h1 class="wordmark">ZERONET</h1>
+      <p class="thesis">Sleep through the ride. Your phone wakes you before your stop.</p>
+      <p class="sub">
+        Pick where you are going, choose how far ahead you want warning, and put the phone away.
+        Zeronet watches your position and sets off a full alarm while you still have kilometres to
+        spare, then again when you arrive.
+      </p>
+      <div class="hero-meta">
+        <span class="chip">Alarm over the lock screen</span>
+        <span class="chip">Spoken in 9 languages</span>
+        <span class="chip">Tracks with the screen off</span>
+      </div>
+    </div>
+
+    <div class="console" id="console" data-state="tracking" data-running="0">
+      <div class="console-top">
+        <span class="status"><span class="dot"></span><span id="statusText">Tracking</span></span>
+        <span class="gps">GPS &plusmn;8 m</span>
+      </div>
+
+      <div class="radar">
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="ring r3"></div>
+        <div class="ring r4"></div>
+        <div class="sweep"></div>
+        <div class="pin"></div>
+        <div class="readout">
+          <div class="distance"><span id="distance">6.2</span><span>km</span></div>
+          <div class="to">to Kacheguda</div>
+        </div>
+      </div>
+
+      <dl class="console-grid">
+        <div class="cell">
+          <dt>ETA</dt>
+          <dd id="eta">14 min</dd>
+        </div>
+        <div class="cell">
+          <dt>Alert at</dt>
+          <dd>5.0 km</dd>
+        </div>
+      </dl>
+
+      <div class="alarm" id="alarm" hidden>
+        <div class="alarm-title" id="alarmTitle">🚨 Proximity alert</div>
+        <div class="alarm-body" id="alarmBody">5.0 km to Kacheguda</div>
+        <div class="alarm-actions">
+          <button type="button" id="snooze">Remind in 5 km</button>
+          <button type="button" id="stopAlarm">Stop alarm</button>
+        </div>
+      </div>
+
+      <div class="console-actions">
+        <button type="button" class="btn-primary" id="run">Run the trip</button>
+        <button type="button" id="reset">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">How a trip runs</p>
+      <h2>Four taps at the start, nothing to watch after that.</h2>
+      <p>The whole point is that you stop checking the map. Set it once when you board.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>Pick the destination</h3>
+        <p>Search for a place, or long-press the map to drop a pin and drag it to the exact spot.</p>
+      </div>
+      <div class="step">
+        <h3>Set the alert distance</h3>
+        <p>Choose how far out the alarm should fire. Saved places remember their own distance.</p>
+      </div>
+      <div class="step">
+        <h3>Start tracking</h3>
+        <p>Lock the phone. A notification and a home-screen widget keep the distance and ETA in view.</p>
+      </div>
+      <div class="step">
+        <h3>Get woken</h3>
+        <p>The alarm sounds at your alert distance, and again when you reach the arrival radius.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">What it does</p>
+      <h2>Built for the person asleep in the last row.</h2>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <p class="tag">Alarm</p>
+        <h3>Loud enough, on the lock screen</h3>
+        <p>
+          Full-screen alarm over the lock screen with Stop and Snooze. Pick your own tone, or let the
+          volume climb from quiet to full over 10 seconds to a minute so it wakes you gently.
+        </p>
+      </div>
+      <div class="feature">
+        <p class="tag">Silent mode</p>
+        <h3>Vibrate only, for a quiet coach</h3>
+        <p>
+          Sound and vibration, sound alone, or vibration alone. Zeronet warns you if your alarm volume
+          is at zero, before the trip rather than after your stop.
+        </p>
+      </div>
+      <div class="feature">
+        <p class="tag">Voice</p>
+        <h3>Spoken alerts in your language</h3>
+        <p>The distance and destination are announced before the alarm, in the language you choose.</p>
+        <div class="quote">&ldquo;Proximity alert. 5 kilometres to Kacheguda.&rdquo;</div>
+      </div>
+      <div class="feature">
+        <p class="tag">Snooze</p>
+        <h3>Remind me in 5 km</h3>
+        <p>
+          Not ready to get up? One tap sends the alarm away and brings it back five kilometres later,
+          with the voice confirming when it will return.
+        </p>
+      </div>
+      <div class="feature">
+        <p class="tag">Saved</p>
+        <h3>Home and Office, one tap away</h3>
+        <p>
+          Save the stops you use every day with a name and their own alert distance, then start a trip
+          without touching the map.
+        </p>
+      </div>
+      <div class="feature">
+        <p class="tag">History</p>
+        <h3>Every trip, and how it ended</h3>
+        <p>
+          Arrived, cancelled or interrupted, with distance travelled and the time it took. Tap any trip
+          to set the same destination again.
+        </p>
+      </div>
+      <div class="feature">
+        <p class="tag">Widget</p>
+        <h3>Distance left on the home screen</h3>
+        <p>The active trip, how far is left and the ETA, without opening the app.</p>
+      </div>
+      <div class="feature">
+        <p class="tag">Arrival</p>
+        <h3>&ldquo;You have arrived. Check your belongings.&rdquo;</h3>
+        <p>
+          A second alarm fires inside the arrival radius you set, so you get off with everything you
+          got on with.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Voice alerts</p>
+      <h2>Nine languages, each in its own script.</h2>
+      <p>Choose the voice language in settings and test it before you travel.</p>
+    </div>
+    <div class="langs">
+      <div class="lang"><b>English</b><span>en-IN</span></div>
+      <div class="lang"><b>हिन्दी</b><span>Hindi</span></div>
+      <div class="lang"><b>తెలుగు</b><span>Telugu</span></div>
+      <div class="lang"><b>தமிழ்</b><span>Tamil</span></div>
+      <div class="lang"><b>ಕನ್ನಡ</b><span>Kannada</span></div>
+      <div class="lang"><b>മലയാളം</b><span>Malayalam</span></div>
+      <div class="lang"><b>मराठी</b><span>Marathi</span></div>
+      <div class="lang"><b>বাংলা</b><span>Bengali</span></div>
+      <div class="lang"><b>ગુજરાતી</b><span>Gujarati</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">What it needs</p>
+      <h2>Straight about the phone it runs on.</h2>
+    </div>
+    <dl class="specs">
+      <div class="spec">
+        <dt>Platform</dt>
+        <dd>Android phones and tablets with GPS.</dd>
+      </div>
+      <div class="spec">
+        <dt>Location</dt>
+        <dd>Precise location while a trip is running. Approximate location makes alerts late.</dd>
+      </div>
+      <div class="spec">
+        <dt>Maps</dt>
+        <dd>OpenStreetMap. Searching for a place uses the internet; tracking to it does not.</dd>
+      </div>
+      <div class="spec">
+        <dt>Battery</dt>
+        <dd>Set Zeronet to &ldquo;Don&rsquo;t optimise&rdquo; so long trips are never cut short.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <footer>
+    <div class="footer-glass"><img src="blastem-logo.png" alt=""></div>
+    <div>
+      <div class="f-name">Blastem Industries</div>
+      <div class="f-line">Zeronet &middot; Precision destination awareness</div>
+    </div>
+    <div class="f-right">Version 1.0 &middot; Android 5.0 and later</div>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var box = document.getElementById("console");
+    var distanceEl = document.getElementById("distance");
+    var etaEl = document.getElementById("eta");
+    var statusEl = document.getElementById("statusText");
+    var alarm = document.getElementById("alarm");
+    var alarmTitle = document.getElementById("alarmTitle");
+    var alarmBody = document.getElementById("alarmBody");
+    var runBtn = document.getElementById("run");
+
+    var REST = 6.2;          // the console's resting state: mid-trip, alarm still ahead
+    var START = 12.0;        // where the demo trip begins
+    var ALERT_AT = 5.0;      // the alert distance set for this trip
+    var ARRIVE_AT = 0.15;    // arrival radius, in kilometres
+    var SPEED = 42;          // km/h, a plausible suburban train
+    var calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var km = REST;
+    var snoozedTo = null;
+    var raf = null;
+    var last = 0;
+
+    function show(state) {
+      box.dataset.state = state;
+      statusEl.textContent = state === "alert" ? "Alert" : state === "arrived" ? "Arrived" : "Tracking";
+    }
+
+    function paint() {
+      distanceEl.textContent = km.toFixed(km < 1 ? 2 : 1);
+      var minutes = Math.max(1, Math.round((km / SPEED) * 60));
+      etaEl.textContent = km <= ARRIVE_AT ? "arrived" : minutes + " min";
+    }
+
+    function fire(kind) {
+      if (kind === "arrived") {
+        alarmTitle.textContent = "📍 You have arrived";
+        alarmBody.textContent = "You have reached Kacheguda. Check your belongings.";
+      } else {
+        alarmTitle.textContent = "🚨 Proximity alert";
+        alarmBody.textContent = km.toFixed(1) + " km to Kacheguda";
+      }
+      alarm.hidden = false;
+      show(kind === "arrived" ? "arrived" : "alert");
+      stop();
+    }
+
+    function stop() {
+      box.dataset.running = "0";
+      if (raf) cancelAnimationFrame(raf);
+      raf = null;
+      runBtn.textContent = "Run the trip";
+    }
+
+    function tick(now) {
+      var dt = last ? (now - last) / 1000 : 0;
+      last = now;
+      // One second of the demo covers a minute of the ride.
+      km = Math.max(0, km - (SPEED / 60) * dt);
+      paint();
+
+      if (km <= ARRIVE_AT) { km = 0; paint(); fire("arrived"); return; }
+      var trigger = snoozedTo === null ? ALERT_AT : snoozedTo;
+      if (trigger !== null && km <= trigger) { fire("proximity"); return; }
+      raf = requestAnimationFrame(tick);
+    }
+
+    function run() {
+      alarm.hidden = true;
+      snoozedTo = null;
+      km = START;
+      show("tracking");
+      paint();
+      if (calm) { km = ALERT_AT; paint(); fire("proximity"); return; }
+      box.dataset.running = "1";
+      runBtn.textContent = "Running…";
+      last = 0;
+      raf = requestAnimationFrame(tick);
+    }
+
+    function reset() {
+      stop();
+      alarm.hidden = true;
+      snoozedTo = null;
+      km = REST;
+      show("tracking");
+      paint();
+    }
+
+    runBtn.addEventListener("click", run);
+    document.getElementById("reset").addEventListener("click", reset);
+
+    document.getElementById("snooze").addEventListener("click", function () {
+      alarm.hidden = true;
+      snoozedTo = Math.max(ARRIVE_AT, km - 5);
+      show("tracking");
+      if (calm) { km = snoozedTo; paint(); fire("proximity"); return; }
+      box.dataset.running = "1";
+      runBtn.textContent = "Running…";
+      last = 0;
+      raf = requestAnimationFrame(tick);
+    });
+
+    document.getElementById("stopAlarm").addEventListener("click", function () {
+      alarm.hidden = true;
+      show(km <= ARRIVE_AT ? "arrived" : "tracking");
+    });
+
+    paint();
+  })();
+</script>
