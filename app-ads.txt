@@ -1,0 +1,5 @@
+# app-ads.txt for Zeronet (Blastem Industries)
+# Replace pub-5531828470553936 with your AdMob publisher ID (AdMob → Settings → Account information),
+# then serve this file at the root of the website listed as "Website" in your Play Store listing,
+# e.g. https://your-domain/app-ads.txt
+google.com, pub-5531828470553936, DIRECT, f08c47fec0942fa0

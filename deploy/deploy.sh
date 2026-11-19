@@ -3,8 +3,9 @@
 #
 #   ./deploy/deploy.sh user@your-server-ip
 #
-# Copies only the public site files (pages, logos, assets/) over SSH, then checks
-# the key URLs respond. Anything removed locally is removed on the server too.
+# Copies only the public site files (pages, logos, assets/, app-ads.txt) over SSH, then
+# checks the key URLs respond. It only adds and updates files: nothing already on the
+# server is deleted (remove old files by hand if ever needed).
 set -euo pipefail
 
 TARGET="${1:?usage: ./deploy/deploy.sh user@server [ssh-port]}"
@@ -15,20 +16,24 @@ cd "$(dirname "$0")/.."
 
 # Fail early rather than publish a half-broken site.
 for f in index.html sentinel.html zeronet.html trackwise-privacy.html trackwise-terms.html \
+         zeronet-privacy.html zeronet-terms.html zeronet-licenses.html zeronet-legal.css app-ads.txt \
          assets/site.css assets/site.js blastem-logo.png blastem-mark.png; do
   [ -f "$f" ] || { echo "Missing $f; not deploying."; exit 1; }
 done
 
 echo "== Uploading to $TARGET:$ROOT"
-rsync -avz --delete --delete-excluded -e "ssh -p $PORT" \
+rsync -avz -e "ssh -p $PORT" \
   --include='*.html' --include='*.png' \
+  --include='zeronet-legal.css' --include='app-ads.txt' \
   --include='assets/***' \
   --exclude='*' \
   ./ "$TARGET:$ROOT/"
 
 echo "== Checking the live site"
 fail=0
-for path in / /sentinel.html /zeronet.html /trackwise-privacy.html /trackwise-terms.html /assets/site.css /assets/sentinel/device.webp; do
+for path in / /sentinel.html /zeronet.html /trackwise-privacy.html /trackwise-terms.html \
+            /zeronet-privacy.html /zeronet-terms.html /zeronet-legal.css /app-ads.txt \
+            /assets/site.css /assets/sentinel/device.webp; do
   code=$(curl -s -o /dev/null -w "%{http_code}" "$SITE$path" || echo 000)
   printf "  %-30s %s\n" "$path" "$code"
   [ "$code" = 200 ] || fail=1
