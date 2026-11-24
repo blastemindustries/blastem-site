@@ -91,8 +91,10 @@ fi
 REL="releases/$(date -u +%Y%m%dT%H%M%SZ)"
 echo "== Building $REL from the live release"
 "${SSH[@]}" "set -e; cd $BASE; cp -a \"$LIVE\" \"$REL\""
-rsync -rlt --chmod=D755,F644 -e "ssh -i $KEY -o BatchMode=yes" "${FILES[@]}" "$HOST:$BASE/$REL/"
-"${SSH[@]}" "set -e; cd $BASE/$REL; chown -R --reference=\"$LIVE\" .; [ -s index.html ] && [ -s app-ads.txt ]"
+# If anything below fails, remove the half-built release; the live site is untouched until the switch.
+trap '"${SSH[@]}" "cd $BASE && [ \"\$(readlink current)\" != \"$REL\" ] && rm -rf \"$REL\"" || true' ERR
+rsync -rlt -e "ssh -i $KEY -o BatchMode=yes" "${FILES[@]}" "$HOST:$BASE/$REL/"
+"${SSH[@]}" "set -e; cd $BASE/$REL; chown -R --reference=\"$LIVE\" .; find . -type d -exec chmod 755 {} +; find . -type f -exec chmod 644 {} +; [ -s index.html ] && [ -s app-ads.txt ]"
 
 echo "== Switching live to $REL"
 "${SSH[@]}" "set -e; cd $BASE; ln -sfn \"$REL\" current.tmp && mv -T current.tmp current"
