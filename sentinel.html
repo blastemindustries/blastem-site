@@ -944,7 +944,9 @@
       requestAnimationFrame(frame);
       if (!visible) return;
       t += 0.016;
+      if (!W || !H) return;   // not laid out yet: mouse.x / W would be NaN and the gradients would throw
       var vx = W * (0.62 + (mouse.x / W - 0.5) * 0.04), vy = H * 0.38 + (mouse.y / H - 0.5) * 10;
+      if (!isFinite(vx) || !isFinite(vy)) { vx = W * 0.62; vy = H * 0.38; }
       ctx.clearRect(0, 0, W, H);
       var g = ctx.createLinearGradient(0, vy, 0, H); g.addColorStop(0, "rgba(0,245,255,0.05)"); g.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = g; ctx.fillRect(0, vy, W, H - vy);

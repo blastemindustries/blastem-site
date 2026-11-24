@@ -103,15 +103,32 @@ Certificates renew automatically.
 
 ## Updating the site later
 
+**Current setup (since Nov 2026):** the site runs in Docker. `blastem-nginx` (ports 80/443,
+HTTPS) forwards blastemindustries.com to the `blastem-website` container, which serves
+`/opt/blastem-website/current`. `current` is a symlink to `releases/<timestamp>`.
+The `/var/www/blastemindustries.com` steps above describe the original plan and are no
+longer what runs.
+
+From this repository on your computer (uses `root@67.211.221.155` and `~/.ssh/trackwise_deploy`):
+
 ```bash
-git pull
-./deploy/deploy.sh ubuntu@203.0.113.10
+./deploy/deploy.sh --dry-run    # see what would change
+./deploy/deploy.sh              # deploy
 ```
 
-Changes are live as soon as the script finishes, and the script checks the main pages
-respond.
+The script builds a new release from a copy of the live one, adds or updates the site
+files, switches `current` in one step and checks the key URLs (including `/app-ads.txt`).
+It never deletes anything, and if a page differs from the live copy it lists it and asks
+before replacing it, so edits made directly on the server aren't lost silently.
+
+**Edit pages here, not on the server.** If you ever do change a page on the server, copy
+it back into this repository before the next deploy.
 
 ## Rolling back
 
-Put the `@` and `www` records back as they were in your screenshot. With a 600-second TTL,
-the Google Sites version is back within minutes.
+```bash
+./deploy/deploy.sh --rollback
+```
+
+Switches `current` back to the previous release. All releases stay in
+`/opt/blastem-website/releases/`.

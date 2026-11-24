@@ -298,6 +298,74 @@
   .loop span.on { color: #04131C; background: var(--cyan); box-shadow: 0 0 16px rgba(0,245,255,.5); }
   .loop i { font-style: normal; opacity: .5; }
 
+
+  /* ---------- merged live demos: Sentinel FO mobile, Sentinel Network, SAMS ---------- */
+  .product.sm { --accent: #FF6B6B; --acc: 255, 107, 107; }
+  .product.sn { --accent: #FFAE4F; --acc: 255, 174, 79; }
+  .product.fl { --accent: #5FE3A1; --acc: 95, 227, 161; }
+  .product.sm::before, .product.sn::before, .product.fl::before { background: radial-gradient(600px circle at var(--mx) var(--my), rgba(var(--acc), .09), transparent 45%); }
+  .product.sm::after, .product.sn::after, .product.fl::after { background: radial-gradient(400px circle at var(--mx) var(--my), rgba(var(--acc), .7), transparent 50%); }
+  .product.sm .btn::before, .product.sn .btn::before, .product.fl .btn::before { background: linear-gradient(90deg, var(--accent), #fff); }
+  .product.sm .btn:hover, .product.sn .btn:hover, .product.fl .btn:hover { border-color: var(--accent); box-shadow: 0 10px 40px rgba(var(--acc), .25); }
+  .pill { display: inline-flex; align-items: center; gap: 7px; font-family: var(--display); font-weight: 600; font-size: 11px; letter-spacing: .2em; color: var(--accent); padding: 6px 11px; border-radius: 999px; border: 1px solid rgba(var(--acc), .45); background: rgba(var(--acc), .08); text-transform: uppercase; transition: all .3s; }
+  .pill i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; animation: blink 1.2s infinite; }
+  .mini { font-family: var(--mono); font-size: 10px; color: var(--dim); }
+  .demo-btns { display: flex; gap: 8px; margin-top: 12px; }
+  .demo-btns button { flex: 1; cursor: pointer; padding: 12px 10px; border-radius: 14px; font-family: var(--display); font-weight: 600; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--edge); background: var(--panel-strong); color: var(--text); transition: transform .2s, border-color .2s; }
+  .demo-btns button:hover { border-color: var(--accent); }
+  .demo-btns button:active { transform: scale(.97); }
+  .demo-btns button.go { border: 0; color: #1A0505; background: linear-gradient(90deg, var(--accent), #FFD9D9); box-shadow: 0 8px 26px rgba(var(--acc), .25); }
+
+  /* Sentinel FO mobile: g-force trace + countdown */
+  .sm-scope { position: relative; margin-top: 14px; border-radius: 16px; border: 1px solid var(--edge); background: rgba(0,0,0,.35); overflow: hidden; }
+  .sm-scope canvas { display: block; width: 100%; height: 150px; }
+  .sm-scope .ax { position: absolute; left: 10px; top: 8px; font-family: var(--mono); font-size: 10px; color: var(--dim); }
+  .sm-g { position: absolute; right: 10px; top: 6px; font-family: var(--display); font-weight: 700; font-size: 24px; font-variant-numeric: tabular-nums; }
+  .sm-g small { font-size: 12px; color: var(--muted); margin-left: 2px; }
+  .sm-cells { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .sm-alert { margin-top: 12px; display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center; border-radius: 16px; padding: 12px; border: 1px solid rgba(255,107,107,.5); background: linear-gradient(180deg, rgba(255,107,107,.16), rgba(255,107,107,.05)); opacity: .35; filter: saturate(.3); transition: opacity .4s, filter .4s; }
+  .screen.impact .sm-alert, .screen.sent .sm-alert { opacity: 1; filter: none; }
+  .screen.impact { animation: shake .5s linear 2; }
+  .screen.sent .pill { color: var(--amber); border-color: rgba(255,194,75,.5); background: rgba(255,194,75,.1); }
+  .sm-count { position: relative; width: 64px; height: 64px; }
+  .sm-count svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .sm-count circle { fill: none; stroke-width: 5; }
+  .sm-count .bg { stroke: rgba(255,255,255,.1); }
+  .sm-count .fg { stroke: #FF6B6B; stroke-linecap: round; stroke-dasharray: 176; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
+  .sm-count b { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-size: 22px; }
+  .sm-alert h4 { margin: 0; font-family: var(--display); font-size: 12px; letter-spacing: .14em; color: #FF6B6B; text-transform: uppercase; }
+  .sm-alert p { margin: 3px 0 0; font-size: 12.5px; color: #F5D5D8; line-height: 1.4; }
+  .sm-contacts { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+  .sm-contacts span { font-family: var(--mono); font-size: 10px; border: 1px solid rgba(255,255,255,.14); border-radius: 99px; padding: 2px 8px; color: var(--muted); transition: all .3s; }
+  .sm-contacts span.ok { border-color: rgba(255,194,75,.6); color: var(--amber); background: rgba(255,194,75,.1); }
+
+  /* console frame for the two platforms */
+  .console { position: relative; width: min(100%, 470px); border-radius: 26px; padding: 16px; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.015)), #030812; border: 1px solid var(--edge); box-shadow: 0 40px 90px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.1); transform: translateZ(60px); transition: transform .3s ease-out; }
+  .console-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .console-top .dots { display: flex; gap: 6px; }
+  .console-top .dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.12); }
+  .c-map { margin-top: 12px; border-radius: 16px; overflow: hidden; border: 1px solid var(--edge); background: #020910; }
+  .c-map svg { display: block; width: 100%; height: auto; }
+  .c-map .road { stroke: rgba(255,255,255,.07); stroke-width: 6; fill: none; stroke-linecap: round; }
+  .c-map .road.main { stroke: rgba(255,255,255,.11); stroke-width: 9; }
+  .c-map .block { fill: rgba(255,255,255,.025); }
+  .c-map .route { fill: none; stroke: #FFAE4F; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 6 8; filter: drop-shadow(0 0 4px #FFAE4F); }
+  .c-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .c-kpis dd { font-size: 17px; }
+  .c-feed { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 5px; height: 112px; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, #000 65%, transparent); mask-image: linear-gradient(180deg, #000 65%, transparent); }
+  .c-feed li { display: grid; grid-template-columns: 44px 1fr; gap: 8px; font-size: 12px; color: var(--muted); animation: slideIn .5s var(--ease) both; }
+  .c-feed time { font-family: var(--mono); font-size: 10px; color: var(--dim); padding-top: 2px; }
+  .c-feed b { font-weight: 500; color: var(--text); }
+  .c-feed .hot b { color: #FF6B6B; } .c-feed .go b { color: #FFAE4F; } .c-feed .done b { color: #5FE3A1; }
+  .c-net { margin-top: 12px; border-radius: 16px; overflow: hidden; border: 1px solid var(--edge); background: #020a08; }
+  .c-net svg { display: block; width: 100%; height: auto; }
+  .c-net .lane { fill: none; stroke: rgba(95,227,161,.16); stroke-width: 2; }
+  .c-net .link { stroke: rgba(95,227,161,.14); stroke-width: 1; stroke-dasharray: 2 4; }
+  .c-topic { margin-top: 10px; font-family: var(--mono); font-size: 11px; color: #5FE3A1; border: 1px solid rgba(95,227,161,.25); background: rgba(95,227,161,.06); border-radius: 12px; padding: 9px 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .c-topic span { color: var(--muted); }
+  @media (max-width: 980px) { .console { transform: none !important; } }
+  @media (max-width: 520px) { .console { padding: 12px; border-radius: 22px; } .c-kpis dd { font-size: 14px; } .c-feed li { font-size: 11.5px; } }
+
   .apps-head { margin-top: clamp(60px, 9vw, 110px); }
 
   @media (max-width: 1100px) { .devs { grid-template-columns: repeat(2, 1fr); } }
@@ -341,7 +409,7 @@
     <a href="#domains" data-scramble>Domains</a>
     <a href="./sentinel.html" data-scramble>Sentinel FO</a>
     <a href="#developments" data-scramble>Developments</a>
-    <a href="#apps" data-scramble>Apps</a>
+    <a href="#apps" data-scramble>Demos</a>
     <a class="nav-cta" href="#contact">Contact</a>
   </nav>
   <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><i></i></button>
@@ -584,8 +652,8 @@
     <div class="wrap">
       <div class="sec-head">
         <span class="sec-num">/04</span>
-        <h2 class="sec-title"><span class="split-line reveal-split"><span>Apps you</span></span><span class="split-line reveal-split"><span class="chrome">can poke at.</span></span></h2>
-        <p class="sec-sub reveal">Two of our mobile apps, with live demos. Each one solves a single, specific problem.</p>
+        <h2 class="sec-title"><span class="split-line reveal-split"><span>Demos you</span></span><span class="split-line reveal-split"><span class="chrome">can poke at.</span></span></h2>
+        <p class="sec-sub reveal">Five live demos: two everyday apps, then three parts of the Sentinel safety system, from the phone in the car to the control room and the fleet.</p>
       </div>
       <div class="products">
         <!-- Zeronet -->
@@ -683,6 +751,140 @@
             <div class="demo-note">Tap “Add expense” &middot; demo data</div>
           </div>
         </article>
+
+        <!-- Sentinel FO mobile -->
+        <article class="product sm reveal tilt-card" id="sentinel-mobile">
+          <div class="p-info">
+            <div class="p-tag"><span class="tag on">iOS</span><span class="tag on">Android</span><span class="tag">Crash detection</span><span class="tag">In development</span></div>
+            <h3 class="p-name"><span class="scramble" data-text="Sentinel FO">Sentinel FO</span></h3>
+            <p class="p-pitch">If you crash and can&rsquo;t call for help, your phone will.</p>
+            <p class="p-desc">Sentinel can start with just a phone. Its motion sensors watch for the sudden force of a crash while you drive. When it detects one, a countdown starts, and unless you cancel it, your location goes to your emergency contacts.</p>
+            <ul class="p-feats">
+              <li>Starts when you start driving</li>
+              <li>Tells a crash from a hard brake</li>
+              <li>10-second cancel window</li>
+              <li>SMS with your location</li>
+              <li>Dash-cam recording</li>
+              <li>Feeds the Sentinel Network</li>
+            </ul>
+            <div class="p-links">
+              <a class="btn magnetic" href="./sentinel.html#emergency" data-cursor="OPEN">The emergency flow <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+            </div>
+          </div>
+          <div class="p-stage">
+            <div class="device">
+              <div class="screen" id="smScreen">
+                <div class="notch"></div>
+                <div class="zn-top"><span class="pill"><i></i><span id="smStatus">Monitoring</span></span><span class="mini" id="smSpeed">48 km/h</span></div>
+                <div class="sm-scope"><canvas id="smScope" aria-hidden="true"></canvas><span class="ax">g-force &middot; live</span><span class="sm-g"><span id="smG">1.0</span><small>g</small></span></div>
+                <dl class="sm-cells">
+                  <div class="cell"><dt>Trip</dt><dd id="smTrip">12.4 km</dd></div>
+                  <div class="cell"><dt>Threshold</dt><dd>4.0 g</dd></div>
+                </dl>
+                <div class="sm-alert">
+                  <div class="sm-count"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="28"/><circle class="fg" id="smRing" cx="32" cy="32" r="28"/></svg><b id="smCount">10</b></div>
+                  <div>
+                    <h4 id="smTitle">Standing by</h4>
+                    <p id="smMsg">No impact detected.</p>
+                    <div class="sm-contacts" id="smContacts"><span>Amma</span><span>Ravi</span><span>Priya</span></div>
+                  </div>
+                </div>
+                <div class="demo-btns"><button type="button" class="go" id="smImpact">Simulate impact</button><button type="button" id="smOk">I&rsquo;m OK</button></div>
+              </div>
+            </div>
+            <div class="demo-note">Simulation &middot; tap to crash</div>
+          </div>
+        </article>
+
+        <!-- Sentinel Emergency Network -->
+        <article class="product sn reveal tilt-card" id="sentinel-network">
+          <div class="p-info">
+            <div class="p-tag"><span class="tag on">Platform</span><span class="tag">Emergency response</span><span class="tag">In development</span></div>
+            <h3 class="p-name"><span class="scramble" data-text="Sentinel Network">Sentinel Network</span></h3>
+            <p class="p-pitch">One live picture for everyone who responds.</p>
+            <p class="p-desc">An emergency platform for hospitals, control rooms, traffic police, RTO departments and disaster management authorities. Crash alerts from Sentinel FO land on a shared map, the nearest ambulance is dispatched, and the receiving hospital is told before it arrives.</p>
+            <ul class="p-feats">
+              <li>Live incident map</li>
+              <li>Ambulance dispatch</li>
+              <li>Hospital readiness</li>
+              <li>Government command center</li>
+              <li>Audit log for every action</li>
+              <li>Role-based access</li>
+            </ul>
+            <div class="p-links">
+              <a class="btn magnetic" href="./sentinel.html#platform" data-cursor="OPEN">See the consoles <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+            </div>
+          </div>
+          <div class="p-stage">
+            <div class="console" id="snConsole">
+              <div class="console-top"><span class="dots"><i></i><i></i><i></i></span><span class="pill"><i></i>Command center</span><span class="mini" id="snClock">--:--:--</span></div>
+              <div class="c-map">
+                <svg viewBox="0 0 400 250" aria-hidden="true">
+                  <g id="snBlocks"></g>
+                  <path class="road main" d="M0 125 H400"/><path class="road main" d="M200 0 V250"/>
+                  <path class="road" d="M0 55 H400 M0 195 H400 M70 0 V250 M130 0 V250 M270 0 V250 M330 0 V250"/>
+                  <path class="route" id="snRoute" d=""/>
+                  <g id="snHosp"></g><g id="snPings"></g>
+                  <circle id="snAmb" r="6" fill="#FFAE4F" opacity="0"/>
+                </svg>
+              </div>
+              <dl class="c-kpis">
+                <div class="cell"><dt>Active</dt><dd id="snActive">0</dd></div>
+                <div class="cell"><dt>En route</dt><dd id="snRoutes">0</dd></div>
+                <div class="cell"><dt>Resolved</dt><dd id="snDone">0</dd></div>
+              </dl>
+              <ul class="c-feed" id="snFeed" aria-live="off"></ul>
+            </div>
+            <div class="demo-note">Simulated incidents</div>
+          </div>
+        </article>
+
+        <!-- SAMS -->
+        <article class="product fl reveal tilt-card" id="sams">
+          <div class="p-info">
+            <div class="p-tag"><span class="tag on">Platform</span><span class="tag">Fleet intelligence</span><span class="tag">MQTT</span><span class="tag">In development</span></div>
+            <h3 class="p-name"><span class="scramble" data-text="SAMS">SAMS</span></h3>
+            <p class="p-pitch">Where every vehicle is, how it&rsquo;s doing, and what&rsquo;s on its route.</p>
+            <p class="p-desc">Fleet software for connected vehicles. Devices report over MQTT or HTTPS, and SAMS turns that stream into route intelligence, health events and emergency triggers that operators can act on as they arrive.</p>
+            <ul class="p-feats">
+              <li>Live telemetry over MQTT</li>
+              <li>AI route intelligence</li>
+              <li>Vehicle health events</li>
+              <li>Nearby-vehicle search</li>
+              <li>Temporary speed limits</li>
+              <li>Firmware updates over the air</li>
+            </ul>
+            <div class="p-links">
+              <a class="btn magnetic" href="./sentinel.html#platform" data-cursor="OPEN">Fleet ops console <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 8h12M9 3l5 5-5 5"/></svg></a>
+            </div>
+          </div>
+          <div class="p-stage">
+            <div class="console" id="flConsole">
+              <div class="console-top"><span class="dots"><i></i><i></i><i></i></span><span class="pill"><i></i>Broker connected</span><span class="mini"><span id="flRate">0</span> msg/s</span></div>
+              <div class="c-net">
+                <svg viewBox="0 0 400 230" aria-hidden="true">
+                  <path class="lane" id="flL1" d="M-10 185 C 80 185, 110 115, 200 115 S 330 40, 410 50"/>
+                  <path class="lane" id="flL2" d="M-10 65 C 90 55, 130 200, 230 192 S 360 145, 410 165"/>
+                  <path class="lane" id="flL3" d="M60 240 C 70 155, 160 145, 210 88 S 290 -10, 330 -10"/>
+                  <g id="flLinks"></g>
+                  <g transform="translate(200 115)">
+                    <circle r="26" fill="rgba(95,227,161,.08)" stroke="rgba(95,227,161,.5)"/>
+                    <circle r="26" fill="none" stroke="#5FE3A1" opacity=".6"><animate attributeName="r" values="26;44" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;0" dur="2.4s" repeatCount="indefinite"/></circle>
+                    <text y="4" text-anchor="middle" fill="#5FE3A1" font-family="IBM Plex Mono, monospace" font-size="10">SAMS</text>
+                  </g>
+                  <g id="flPackets"></g><g id="flCars"></g>
+                </svg>
+              </div>
+              <dl class="c-kpis">
+                <div class="cell"><dt>Speed</dt><dd id="flSpeed">&mdash;</dd></div>
+                <div class="cell"><dt>Health</dt><dd id="flHealth">OK</dd></div>
+                <div class="cell"><dt>Devices</dt><dd>3</dd></div>
+              </dl>
+              <div class="c-topic" id="flTopic">sams/telemetry/<span>&hellip;</span></div>
+            </div>
+            <div class="demo-note">Simulated telemetry</div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -764,7 +966,7 @@
       </div>
       <div>
         <h4>Developments</h4>
-        <ul><li><a href="./sentinel.html">Sentinel FO</a></li><li><a href="./zeronet.html">Zeronet</a></li><li><a href="#trackwise">TrackWise</a></li></ul>
+        <ul><li><a href="./sentinel.html">Sentinel FO</a></li><li><a href="./zeronet.html">Zeronet</a></li><li><a href="#trackwise">TrackWise</a></li><li><a href="#sentinel-network">Sentinel Network</a></li><li><a href="#sams">SAMS</a></li></ul>
       </div>
       <div>
         <h4>Legal</h4>
@@ -889,6 +1091,10 @@
       var dt = Math.min(0.05, (now - last) / 1000); last = now;
       requestAnimationFrame(frame);
       if (!visible) return;
+      // A hidden tab or collapsed pane lays the canvas out at 0x0; drawing a 0-size canvas throws,
+      // so wait for real dimensions and rebuild once they arrive.
+      if (cv.clientWidth !== W || cv.clientHeight !== H) { if (cv.clientWidth && cv.clientHeight) build(); return; }
+      if (!W || !H) return;
       var r = cv.getBoundingClientRect();
       mx = lerp(mx, mouse.x - r.left, 0.12); my = lerp(my, mouse.y - r.top, 0.12);
       ctx.clearRect(0, 0, W, H);
@@ -937,7 +1143,7 @@
     }
     var rt; addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(build, 150); });
     build();
-    if (calm) { ctx.drawImage(dim, 0, 0, W, H); } else requestAnimationFrame(frame);
+    if (calm) { if (W && H) ctx.drawImage(dim, 0, 0, W, H); } else requestAnimationFrame(frame);
   })();
 
   /* ---------------- marquee: drifts, speeds up with scroll velocity ---------------- */
@@ -973,7 +1179,7 @@
 
   /* ---------------- product cards: spotlight + tilt ---------------- */
   $$(".tilt-card").forEach(function (card) {
-    var dev = $(".device", card);
+    var dev = $(".device", card) || $(".console", card);
     card.addEventListener("pointermove", function (e) {
       var r = card.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
       card.style.setProperty("--mx", x + "px"); card.style.setProperty("--my", y + "px");
@@ -1171,6 +1377,215 @@
       [["AI + ROAD", hy - 22], ["RESPONSE", hy + 26]].forEach(function (o) { ctx.strokeStyle = "rgba(95,227,161,.5)"; ctx.beginPath(); ctx.moveTo(hx + 18, hy); ctx.lineTo(W - 70, o[1] - 3); ctx.stroke(); ctx.fillStyle = "rgba(154,176,196,.8)"; ctx.font = "500 9px 'IBM Plex Mono', monospace"; ctx.fillText(o[0], W - 66, o[1]); });
       if (!calm) requestAnimationFrame(draw);
     })();
+  })();
+})();
+</script>
+<script>
+/* ---------------- merged demos: Sentinel FO mobile, Sentinel Network, SAMS ---------------- */
+(function () {
+  "use strict";
+  var calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var byId = function (id) { return document.getElementById(id); };
+  var NS = "http://www.w3.org/2000/svg";
+  // Run a demo only while it is on screen.
+  function whenVisible(el, start, stop) {
+    new IntersectionObserver(function (e) { e[0].isIntersecting ? start() : stop(); }, { threshold: 0.25 }).observe(el);
+  }
+  function hhmm(full) { var t = new Date().toTimeString(); return full ? t.slice(0, 8) : t.slice(0, 5); }
+
+  /* ---- Sentinel FO mobile: live g-force trace; an impact starts a 10 s cancel window ---- */
+  (function () {
+    var screen = byId("smScreen"); if (!screen) return;
+    var cv = byId("smScope"), ctx = cv.getContext("2d"), W = 0, H = 0, dpr = 1;
+    var data = [], t = 0, spike = 0, raf = null, timer = null, left = 10, auto = null, trip = 12.4;
+    var ring = byId("smRing"), contacts = byId("smContacts").children, RING = 176;
+    var state = "watch";
+    function size() {
+      dpr = Math.min(2, devicePixelRatio || 1); W = cv.clientWidth; H = cv.clientHeight;
+      if (!W || !H) return; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function sample() {
+      t++;
+      var g = 1 + Math.sin(t * .09) * .08 + (Math.random() - .5) * .14;
+      if (spike > 0) { g += spike * (Math.random() * .5 + .75); spike *= .82; if (spike < .05) spike = 0; }
+      if (state !== "watch" && spike === 0) g = 1 + (g - 1) * .15;   // parked: gravity only
+      return g;
+    }
+    function draw() {
+      if (!W || !H) { size(); if (!W) return; }
+      ctx.clearRect(0, 0, W, H);
+      var max = 6, base = H - 12, y = function (g) { return base - (g / max) * (H - 28); };
+      ctx.strokeStyle = "rgba(255,255,255,.06)"; ctx.lineWidth = 1;
+      for (var k = 1; k <= 5; k++) { ctx.beginPath(); ctx.moveTo(0, y(k)); ctx.lineTo(W, y(k)); ctx.stroke(); }
+      ctx.setLineDash([4, 5]); ctx.strokeStyle = "rgba(255,107,107,.5)"; ctx.beginPath(); ctx.moveTo(0, y(4)); ctx.lineTo(W, y(4)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = "rgba(255,107,107,.75)"; ctx.font = "10px 'IBM Plex Mono', monospace"; ctx.fillText("impact 4g", 10, y(4) - 6);
+      var grad = ctx.createLinearGradient(0, 0, W, 0); grad.addColorStop(0, "rgba(255,107,107,0)"); grad.addColorStop(1, "#FF6B6B");
+      ctx.strokeStyle = grad; ctx.lineWidth = 2; ctx.beginPath();
+      var step = W / 140;
+      for (var i = 0; i < data.length; i++) { var X = i * step, Y = y(Math.min(max, data[i])); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); }
+      ctx.stroke();
+      var ly = y(Math.min(max, data[data.length - 1] || 1));
+      ctx.fillStyle = "#FF6B6B"; ctx.shadowColor = "#FF6B6B"; ctx.shadowBlur = 12; ctx.beginPath(); ctx.arc((data.length - 1) * step, ly, 3.2, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+    }
+    function frame() {
+      for (var s = 0; s < 2; s++) { data.push(sample()); if (data.length > 140) data.shift(); }
+      var g = data[data.length - 1];
+      byId("smG").textContent = g.toFixed(1);
+      if (state === "watch") { trip += 0.0006; byId("smTrip").textContent = trip.toFixed(1) + " km"; }
+      if (g > 4 && state === "watch") impact();
+      draw(); raf = requestAnimationFrame(frame);
+    }
+    function setRing(n) { ring.style.strokeDashoffset = RING * (1 - n / 10); }
+    function impact() {
+      state = "impact"; screen.classList.remove("sent"); screen.classList.add("impact");
+      byId("smStatus").textContent = "Impact"; byId("smSpeed").textContent = "0 km/h";
+      byId("smTitle").textContent = "Crash detected"; left = 10; tick();
+      clearInterval(timer); timer = setInterval(tick, 1000);
+    }
+    function tick() {
+      byId("smCount").textContent = Math.max(0, left); setRing(Math.max(0, left));
+      byId("smMsg").textContent = "Sending your location in " + left + " s unless you cancel.";
+      if (left <= 0) {
+        clearInterval(timer); state = "sent"; screen.classList.remove("impact"); screen.classList.add("sent");
+        byId("smStatus").textContent = "Help notified"; byId("smTitle").textContent = "Location sent";
+        byId("smMsg").textContent = "17.4401° N, 78.3489° E sent by SMS to 3 contacts.";
+        Array.prototype.forEach.call(contacts, function (c, i) { setTimeout(function () { c.classList.add("ok"); }, i * 250); });
+        clearTimeout(auto); auto = setTimeout(reset, 4500);
+      }
+      left--;
+    }
+    function reset() {
+      clearInterval(timer); clearTimeout(auto); state = "watch"; screen.classList.remove("impact", "sent");
+      byId("smStatus").textContent = "Monitoring"; byId("smSpeed").textContent = "48 km/h";
+      byId("smTitle").textContent = "Standing by"; byId("smMsg").textContent = "No impact detected.";
+      byId("smCount").textContent = "10"; setRing(10);
+      Array.prototype.forEach.call(contacts, function (c) { c.classList.remove("ok"); });
+    }
+    byId("smImpact").addEventListener("click", function () { reset(); spike = 4.6; if (calm) impact(); });
+    byId("smOk").addEventListener("click", function () {
+      if (state === "impact") { reset(); byId("smTitle").textContent = "Cancelled"; byId("smMsg").textContent = "Glad you're OK. Nothing was sent."; }
+      else reset();
+    });
+    size(); addEventListener("resize", size);
+    for (var i = 0; i < 140; i++) data.push(sample());
+    draw();
+    if (calm) return;
+    whenVisible(screen, function () { if (!raf) frame(); }, function () { cancelAnimationFrame(raf); raf = null; });
+  })();
+
+  /* ---- Sentinel Network: incidents ping on the map, the nearest hospital dispatches ---- */
+  (function () {
+    var con = byId("snConsole"); if (!con) return;
+    var route = byId("snRoute"), amb = byId("snAmb"), feed = byId("snFeed");
+    var xs = [0, 70, 130, 200, 270, 330, 400], ys = [0, 55, 125, 195, 250];
+    for (var i = 0; i < xs.length - 1; i++) for (var j = 0; j < ys.length - 1; j++) {
+      var r = document.createElementNS(NS, "rect");
+      r.setAttribute("x", xs[i] + 9); r.setAttribute("y", ys[j] + 9); r.setAttribute("width", xs[i + 1] - xs[i] - 18); r.setAttribute("height", ys[j + 1] - ys[j] - 18); r.setAttribute("rx", 4); r.setAttribute("class", "block");
+      byId("snBlocks").appendChild(r);
+    }
+    var hospitals = [{ x: 70, y: 55, n: "City General" }, { x: 330, y: 195, n: "North Trauma" }, { x: 270, y: 55, n: "East Care" }];
+    hospitals.forEach(function (h) {
+      var g = document.createElementNS(NS, "g"); g.setAttribute("transform", "translate(" + h.x + " " + h.y + ")");
+      g.innerHTML = '<rect x="-9" y="-9" width="18" height="18" rx="5" fill="#03111a" stroke="#5FE3A1"/><path d="M-4 0H4M0 -4V4" stroke="#5FE3A1" stroke-width="2"/>';
+      byId("snHosp").appendChild(g);
+    });
+    var places = ["Hitech City", "Ameerpet", "Banjara Hills", "LB Nagar", "Kukatpally", "Begumpet", "Secunderabad", "Madhapur"];
+    var active = 0, enroute = 0, done = 0, id = 2040, timer = null, clock = null, busy = false;
+    function log(cls, html) {
+      var li = document.createElement("li"); li.className = cls;
+      li.innerHTML = "<time>" + hhmm() + "</time><span>" + html + "</span>";
+      feed.prepend(li); while (feed.children.length > 6) feed.lastChild.remove();
+    }
+    function kpi() { byId("snActive").textContent = active; byId("snRoutes").textContent = enroute; byId("snDone").textContent = done; }
+    function ping(x, y) {
+      var g = document.createElementNS(NS, "g"); g.setAttribute("transform", "translate(" + x + " " + y + ")");
+      g.innerHTML = '<circle r="5" fill="#FF6B6B"/><circle r="5" fill="none" stroke="#FF6B6B" stroke-width="2"><animate attributeName="r" values="5;26" dur="1.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="1.4s" repeatCount="indefinite"/></circle>';
+      byId("snPings").appendChild(g); return g;
+    }
+    function incident() {
+      if (busy) return; busy = true;
+      var x = xs[1 + Math.floor(Math.random() * 5)], y = ys[1 + Math.floor(Math.random() * 3)];
+      var h = hospitals.reduce(function (a, b) { return Math.abs(a.x - x) + Math.abs(a.y - y) <= Math.abs(b.x - x) + Math.abs(b.y - y) ? a : b; });
+      var place = places[Math.floor(Math.random() * places.length)], no = ++id;
+      var p = ping(x, y); active++; kpi();
+      log("hot", "<b>Crash alert #" + no + "</b> &middot; " + place + " &middot; from Sentinel FO");
+      setTimeout(function () {
+        route.setAttribute("d", "M" + h.x + " " + h.y + " H" + x + " V" + y);
+        var L = route.getTotalLength(); enroute++; kpi();
+        log("go", "<b>Ambulance dispatched</b> &middot; " + h.n + " &middot; ETA " + Math.max(3, Math.round(L / 30)) + " min");
+        amb.setAttribute("opacity", 1);
+        var t0 = performance.now(), dur = calm ? 1 : Math.max(1, L * 9);
+        (function f(t) {
+          var k = Math.min(1, (t - t0) / dur), pt = route.getPointAtLength(L * k);
+          amb.setAttribute("cx", pt.x); amb.setAttribute("cy", pt.y);
+          route.style.strokeDashoffset = -t / 40;
+          if (k < 1) return requestAnimationFrame(f);
+          setTimeout(function () {
+            p.remove(); route.setAttribute("d", ""); amb.setAttribute("opacity", 0);
+            active--; enroute--; done++; kpi();
+            log("done", "<b>Patient handed over</b> &middot; " + h.n + " held a bed");
+            busy = false;
+          }, 700);
+        })(t0);
+      }, 1100);
+    }
+    whenVisible(con, function () {
+      byId("snClock").textContent = hhmm(true);
+      if (!clock) clock = setInterval(function () { byId("snClock").textContent = hhmm(true); }, 1000);
+      if (!timer) { incident(); timer = setInterval(incident, 4200); }
+    }, function () { clearInterval(timer); clearInterval(clock); timer = clock = null; });
+  })();
+
+  /* ---- SAMS: vehicles drive their lanes and report to the broker ---- */
+  (function () {
+    var con = byId("flConsole"); if (!con) return;
+    var lanes = ["flL1", "flL2", "flL3"].map(byId), raf = null, last = 0, msgs = 0, rateT = 0, cur = 0;
+    var ids = ["TS09-EA-4417", "TS07-UB-2093", "AP28-CK-0815"];
+    var cars = lanes.map(function (lane, i) {
+      var g = document.createElementNS(NS, "g");
+      g.innerHTML = '<circle r="11" fill="rgba(95,227,161,.12)"/><rect x="-6" y="-4" width="12" height="8" rx="2.5" fill="#5FE3A1"/>';
+      byId("flCars").appendChild(g);
+      var link = document.createElementNS(NS, "line"); link.setAttribute("class", "link"); byId("flLinks").appendChild(link);
+      return { lane: lane, L: lane.getTotalLength(), k: i * .33, v: .045 + i * .012, g: g, link: link, id: ids[i], next: Math.random() * 600 };
+    });
+    function packet(from) {
+      var c = document.createElementNS(NS, "circle"); c.setAttribute("r", 2.6); c.setAttribute("fill", "#D6FFE9");
+      byId("flPackets").appendChild(c);
+      var t0 = performance.now();
+      (function f(t) {
+        var k = Math.min(1, (t - t0) / 650), e = k * k;
+        c.setAttribute("cx", from.x + (200 - from.x) * e); c.setAttribute("cy", from.y + (115 - from.y) * e);
+        if (k < 1) requestAnimationFrame(f); else c.remove();
+      })(t0);
+    }
+    function place(car) {
+      var p = car.lane.getPointAtLength(car.L * car.k), q = car.lane.getPointAtLength(Math.min(car.L, car.L * car.k + 1));
+      car.pos = p;
+      car.g.setAttribute("transform", "translate(" + p.x + " " + p.y + ") rotate(" + Math.atan2(q.y - p.y, q.x - p.x) * 57.3 + ")");
+      car.link.setAttribute("x1", p.x); car.link.setAttribute("y1", p.y); car.link.setAttribute("x2", 200); car.link.setAttribute("y2", 115);
+    }
+    function frame(now) {
+      var dt = last ? Math.min(.05, (now - last) / 1000) : 0; last = now;
+      cars.forEach(function (car, i) {
+        car.k = (car.k + car.v * dt) % 1; place(car);
+        car.next -= dt * 1000;
+        if (car.next > 0) return;
+        car.next = 500 + Math.random() * 700; packet(car.pos); msgs++;
+        if (i === cur % 3) {
+          var spd = Math.round(38 + Math.random() * 30), warn = Math.random() < .12;
+          byId("flSpeed").textContent = spd + " km/h";
+          byId("flHealth").textContent = warn ? "Brakes" : "OK";
+          byId("flHealth").style.color = warn ? "var(--amber)" : "";
+          byId("flTopic").innerHTML = "sams/telemetry/" + car.id + " <span>{ speed: " + spd + ", lat: 17." + (4000 + Math.floor(Math.random() * 999)) + " }</span>";
+        }
+        cur++;
+      });
+      rateT += dt; if (rateT >= 1) { byId("flRate").textContent = msgs; msgs = 0; rateT = 0; }
+      raf = requestAnimationFrame(frame);
+    }
+    cars.forEach(place);
+    if (calm) return;
+    whenVisible(con, function () { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } }, function () { cancelAnimationFrame(raf); raf = null; });
   })();
 })();
 </script>
