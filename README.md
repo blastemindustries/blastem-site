@@ -13,6 +13,7 @@ Static pages served by GitHub Pages.
 | `trackwise-privacy.html` | TrackWise privacy policy — **submitted to the App Store and Google Play** |
 | `trackwise-terms.html` | TrackWise terms of use — linked from the app's first-run consent screen |
 | `zeronet-privacy.html` | Zeronet privacy policy — **used in the Google Play / App Store listings and AdMob consent messages** |
+| `zeronet-help.html` | Zeronet how-to guide — the App Store **Support URL** |
 | `app-ads.txt` | AdMob authorised-seller file. **Must be served at https://blastemindustries.com/app-ads.txt** (domain root); AdMob checks it for Zeronet and any other app with ads |
 | `zeronet-terms.html`, `zeronet-licenses.html`, `zeronet-legal.css` | Zeronet terms of use and open-source licences. Source of truth is `legal/site/` in the Zeronet repo (bundled in the apps); re-copy from there when they change |
 
